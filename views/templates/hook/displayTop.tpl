@@ -88,10 +88,7 @@
     </div>
 {/function}
 
-
-{* JEBIEMY STATYCZNIE*}
-
-<div class="d-none d-lg-block col header-top__block header-top__block--menu position-static">
+<div class="d-none d-lg-block col-12 header-top__block header-top__block--menu position-static">
     <div class="main-menu" id="_desktop_top_menu">
         <ul class="js-main-menu-list main-menu__list row align-items-center justify-content-center mb-0">
 
