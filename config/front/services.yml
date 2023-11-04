@@ -1,0 +1,24 @@
+imports:
+  - { resource: ../common.yml }
+
+services:
+  _defaults:
+    public: true
+    autowire: true
+    autoconfigure: true
+    bind:
+      $module: '@oksydan.is_mainmenu.module'
+      $context: '@oksydan.is_mainmenu.context'
+      $dbPrefix: '%database_prefix%'
+      $menuElementRepository: '@oksydan.is_mainmenu.menu_element_repository'
+      $menuElementCustomRepository: '@oksydan.is_mainmenu.menu_element_custom_repository'
+      $menuElementHtmlRepository: '@oksydan.is_mainmenu.menu_element_html_repository'
+      $menuElementCategoryRepository: '@oksydan.is_mainmenu.menu_element_category_repository'
+      $menuElementBannerRepository: '@oksydan.is_mainmenu.menu_element_banner_repository'
+
+  Oksydan\IsMainMenu\:
+    resource: '../../src/*'
+    exclude:
+      - '../../src/{Repository,Exception,Entity,Controller,Form,Grid,Factory,Handler}'
+      - '../../src/index.php'
+      - '../../src/*/index.php'

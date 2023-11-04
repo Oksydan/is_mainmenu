@@ -1,0 +1,42 @@
+is_mainmenu_controller_index:
+    path: /is_mainmenu/list
+    methods: [GET]
+    defaults:
+        _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuController::indexAction'
+
+is_mainmenu_controller_list:
+    path: /is_mainmenu/{menuItemId}/list
+    methods: [GET]
+    defaults:
+        _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuController::listAction'
+
+is_mainmenu_controller_add:
+    path: /is_mainmenu/menu_element/add
+    methods: [GET, POST]
+    defaults:
+        _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuController::addAction'
+
+is_mainmenu_controller_edit:
+    path: /is_mainmenu/menu_element/{menuItemId}/edit
+    methods: [GET, POST]
+    defaults:
+        _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuController::editAction'
+
+is_mainmenu_controller_delete:
+    path: /is_mainmenu/menu_element/{menuItemId}/delete
+    methods: [GET, POST]
+    defaults:
+        _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuController::deleteAction'
+
+is_mainmenu_controller_toggle_active:
+    path: /is_mainmenu/menu_element/{menuItemId}/toggle_active
+    methods: [POST]
+    defaults:
+        _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuController::toggleActiveAction'
+
+is_mainmenu_controller_update_position:
+    path: /is_mainmenu/menu_element/update_position
+    methods: [POST]
+    defaults:
+        _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuController::updatePositionAction'
+

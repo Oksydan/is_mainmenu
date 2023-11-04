@@ -1,0 +1,29 @@
+{% set layoutHeaderToolbarBtn = {
+    'add' : {
+        'href': newMenuElementUrl,
+        'desc': 'Add new menu element'|trans({}, translationsDomain),
+        'icon': 'add_circle_outline'
+    },
+} %}
+
+{% set layoutTitle = listTitle %}
+
+
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+    {% include '@PrestaShop/Admin/Common/Grid/grid_panel.html.twig' with {'grid': menuGrid} %}
+    {% if backToParentUrl is defined %}
+        <div class="mt-3">
+            <a href="{{ backToParentUrl }}" class="btn btn-primary">
+                <i class="material-icons">arrow_back</i>
+                {{ 'Back to parent list'|trans({}, translationsDomain) }}
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/is_mainmenu/views/js/admin/grid.js') }}"></script>
+{% endblock %}

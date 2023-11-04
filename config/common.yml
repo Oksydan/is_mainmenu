@@ -1,0 +1,50 @@
+services:
+  _defaults:
+    public: true
+
+  oksydan.is_mainmenu.module:
+    class: Is_mainmenu
+    public: true
+    autowire: false
+    factory: [ 'Module', 'getInstanceByName' ]
+    arguments:
+      - 'is_mainmenu'
+
+  oksydan.is_mainmenu.context:
+    class: Context
+    factory: [ '\Context', getContext ]
+
+  oksydan.is_mainmenu.menu_element_repository:
+    class: Oksydan\IsMainMenu\Repository\MenuElementRepository
+    public: true
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+      - Oksydan\IsMainMenu\Entity\MenuElement
+
+  oksydan.is_mainmenu.menu_element_custom_repository:
+    class: Oksydan\IsMainMenu\Repository\MenuElementCustomRepository
+    public: true
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+      - Oksydan\IsMainMenu\Entity\MenuElementCustom
+
+  oksydan.is_mainmenu.menu_element_html_repository:
+    class: Oksydan\IsMainMenu\Repository\MenuElementHtmlRepository
+    public: true
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+      - Oksydan\IsMainMenu\Entity\MenuElementHtml
+
+  oksydan.is_mainmenu.menu_element_category_repository:
+    class: Oksydan\IsMainMenu\Repository\MenuElementCategoryRepository
+    public: true
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+      - Oksydan\IsMainMenu\Entity\MenuElementCategory
+
+  oksydan.is_mainmenu.menu_element_banner_repository:
+    class: Oksydan\IsMainMenu\Repository\MenuElementBannerRepository
+    public: true
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+      - Oksydan\IsMainMenu\Entity\MenuElementBanner

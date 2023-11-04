@@ -1,0 +1,40 @@
+imports:
+  - { resource: ../common.yml }
+  - { resource: grid.yml }
+
+services:
+  _defaults:
+    public: true
+    autowire: true
+    autoconfigure: true
+    bind:
+      $module: '@oksydan.is_mainmenu.module'
+      $context: '@oksydan.is_mainmenu.context'
+      $locales: '@=service("prestashop.adapter.legacy.context").getLanguages()'
+      $multistoreFeature: '@prestashop.adapter.multistore_feature'
+      $contextAdapter: '@prestashop.adapter.shop.context'
+      $dbPrefix: '%database_prefix%'
+      $menuElementRepository: '@oksydan.is_mainmenu.menu_element_repository'
+      $menuElementCustomRepository: '@oksydan.is_mainmenu.menu_element_custom_repository'
+      $menuElementHtmlRepository: '@oksydan.is_mainmenu.menu_element_html_repository'
+      $menuElementCategoryRepository: '@oksydan.is_mainmenu.menu_element_category_repository'
+      $menuElementBannerRepository: '@oksydan.is_mainmenu.menu_element_banner_repository'
+      $languages: '@=service("prestashop.adapter.legacy.context").getLanguages(false)'
+      $langRepository: '@prestashop.core.admin.lang.repository'
+      $menuListDataFactory: '@oksydan.is_mainmenu.grid.data.factory.menu_list_data_factory'
+
+  oksydan.is_mainmenu.menu_element_form_builder:
+    class: 'PrestaShop\PrestaShop\Core\Form\IdentifiableObject\Builder\FormBuilder'
+    factory: 'prestashop.core.form.builder.form_builder_factory:create'
+    arguments:
+      - 'Oksydan\IsMainMenu\Form\Type\MenuElementType'
+      - '@Oksydan\IsMainMenu\Form\Provider\MenuElementFormDataProvider'
+
+  Oksydan\IsMainMenu\:
+    resource: '../../src/*'
+    exclude:
+      - '../../src/{Repository,Exception,Entity,Controller}'
+      - '../../src/Handler/File/*'
+      - '../../src/index.php'
+      - '../../src/*/index.php'
+

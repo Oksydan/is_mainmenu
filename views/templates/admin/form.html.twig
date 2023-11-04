@@ -1,0 +1,46 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% form_theme form '@PrestaShop/Admin/TwigTemplateForm/prestashop_ui_kit.html.twig' %}
+
+{% block content %}
+    {{ form_start(form) }}
+    <div class="card">
+        <h3 class="card-header">
+            <i class="material-icons">image</i> {{ title }}
+        </h3>
+        <div class="card-block">
+            <div class="card-body">
+                <div class="form-wrapper">
+                    {{ form_widget(form) }}
+                    {{ form_rest(form) }}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-auto">
+                    <a href="{{ back_btn_link }}" class="btn btn-outline-secondary">
+                        {{ 'Cancel'|trans({}, 'Admin.Actions') }}
+                    </a>
+                </div>
+
+                <div class="col-auto ml-auto">
+                    <button class="btn btn-primary">
+                        {{ 'Save'|trans({}, 'Admin.Actions') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/is_mainmenu/views/js/admin/form.js') }}"></script>
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('../modules/is_mainmenu/views/css/admin/form.css') }}" />
+{% endblock %}
