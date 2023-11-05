@@ -16,7 +16,6 @@ class MenuListBreadcrumbDataProvider implements MenuListBreadcrumbDataProviderIn
             $menuElement = $parentMenuElement;
         }
 
-
         return array_reverse($breadcrumb);
     }
 

@@ -48,8 +48,7 @@ class AdminMenuController extends FrameworkBundleAdminController
         Request $request,
         MenuListFilters $filters,
         int $menuItemId
-    ): Response
-    {
+    ): Response {
         $addNewLink = $this->generateUrl('is_mainmenu_controller_add', ['menuItemId' => $menuItemId]);
         $menuGridFactory = $this->get('oksydan.is_mainmenu.grid.menu_list_grid_factory');
 
