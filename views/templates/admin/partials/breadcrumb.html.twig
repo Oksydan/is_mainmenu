@@ -1,0 +1,28 @@
+
+{% if breadcrumb is defined %}
+  <div class="card">
+    <div class="card-body">
+      <nav>
+        <ol class="breadcrumb">
+          {% for element in breadcrumb %}
+            <li class="breadcrumb-item">
+              {% if element.id is same as(currentMenuElementId) %}
+                <span>{{ element.name }}</span>
+                <a href="{{ path('is_mainmenu_controller_edit', {'menuItemId': element.id}) }}">
+                  <i style="font-size: 16px;" class="material-icons">edit</i>
+                  {{ 'Edit'|trans({}, 'Admin.Actions') }}
+                </a>
+              {% elseif element.isRoot is same as(true) or element.id is same as(currentMenuElementId) %}
+                <span>{{ element.name }}</span>
+              {% else %}
+                <a href="{{ path('is_mainmenu_controller_list', {'menuItemId': element.id}) }}">
+                  {{ element.name }}
+                </a>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ol>
+      </nav>
+    </div>
+  </div>
+{% endif %}
