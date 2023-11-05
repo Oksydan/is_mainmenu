@@ -133,5 +133,4 @@ class MenuElementPresenter implements PresenterInterface
             'depth' => $menuElement->getDepth(),
         ];
     }
-
 }

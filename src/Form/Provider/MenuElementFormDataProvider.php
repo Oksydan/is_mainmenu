@@ -8,14 +8,14 @@ use Is_mainmenu;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Entity\MenuElementBanner;
 use Oksydan\IsMainMenu\Entity\MenuElementCategory;
+use Oksydan\IsMainMenu\Entity\MenuElementCms;
 use Oksydan\IsMainMenu\Entity\MenuElementCustom;
 use Oksydan\IsMainMenu\Entity\MenuElementHtml;
-use Oksydan\IsMainMenu\Entity\MenuElementCms;
 use Oksydan\IsMainMenu\Repository\MenuElementBannerRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCategoryRepository;
+use Oksydan\IsMainMenu\Repository\MenuElementCmsRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCustomRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementHtmlRepository;
-use Oksydan\IsMainMenu\Repository\MenuElementCmsRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use PrestaShop\PrestaShop\Adapter\Shop\Context;
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\DataProvider\FormDataProviderInterface;
@@ -121,6 +121,7 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
                 break;
             case MenuElement::TYPE_HTML:
                 $data = array_merge($data, $this->getHtmlElementData($id));
+                // no break
             case MenuElement::TYPE_CMS:
                 $data = array_merge($data, $this->getCMSElementData($id));
                 break;

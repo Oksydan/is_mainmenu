@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oksydan\IsMainMenu\Repository;
 
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Entity\MenuElementCustom;
 

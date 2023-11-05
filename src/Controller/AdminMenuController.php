@@ -13,6 +13,7 @@ use Oksydan\IsMainMenu\Handler\MenuElement\DeleteMenuElementHandler;
 use Oksydan\IsMainMenu\Handler\MenuElement\ToggleMenuElementStatusHandler;
 use Oksydan\IsMainMenu\Handler\MenuElement\UpdateMenuElementPositionHandler;
 use Oksydan\IsMainMenu\Provider\MenuListBreadcrumbDataProvider;
+use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use Oksydan\IsMainMenu\Translations\TranslationDomains;
 use PrestaShop\PrestaShop\Core\Grid\Position\Exception\PositionDataException;
 use PrestaShop\PrestaShop\Core\Grid\Position\Exception\PositionUpdateException;
@@ -20,7 +21,6 @@ use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 
 class AdminMenuController extends FrameworkBundleAdminController
 {

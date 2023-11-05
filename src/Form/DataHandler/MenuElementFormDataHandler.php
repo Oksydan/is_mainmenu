@@ -6,8 +6,8 @@ namespace Oksydan\IsMainMenu\Form\DataHandler;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Oksydan\IsMainMenu\Entity\MenuElement;
-use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\DataHandler\FormDataHandlerInterface;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
+use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\DataHandler\FormDataHandlerInterface;
 use PrestaShopBundle\Entity\Shop;
 
 class MenuElementFormDataHandler implements FormDataHandlerInterface

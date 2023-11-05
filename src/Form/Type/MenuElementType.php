@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Oksydan\IsMainMenu\Form\Type;
 
 use Oksydan\IsMainMenu\Entity\MenuELement;
-use Oksydan\IsMainMenu\Form\ChoiceProvider\MenuTypeChoiceProvider;
 use Oksydan\IsMainMenu\Form\ChoiceProvider\CMSPagesChoiceProvider;
+use Oksydan\IsMainMenu\Form\ChoiceProvider\MenuTypeChoiceProvider;
 use Oksydan\IsMainMenu\Translations\TranslationDomains;
 use PrestaShop\PrestaShop\Adapter\Feature\MultistoreFeature;
 use PrestaShopBundle\Form\Admin\Type\CategoryChoiceTreeType;
