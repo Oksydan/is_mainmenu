@@ -10,10 +10,12 @@ use Oksydan\IsMainMenu\Entity\MenuElementBanner;
 use Oksydan\IsMainMenu\Entity\MenuElementCategory;
 use Oksydan\IsMainMenu\Entity\MenuElementCustom;
 use Oksydan\IsMainMenu\Entity\MenuElementHtml;
+use Oksydan\IsMainMenu\Entity\MenuElementCms;
 use Oksydan\IsMainMenu\Repository\MenuElementBannerRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCategoryRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCustomRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementHtmlRepository;
+use Oksydan\IsMainMenu\Repository\MenuElementCmsRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use PrestaShop\PrestaShop\Adapter\Shop\Context;
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\DataProvider\FormDataProviderInterface;
@@ -46,6 +48,11 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
     private MenuElementBannerRepository $menuElementBannerRepository;
 
     /*
+     * @var MenuElementCmsRepository
+     */
+    private MenuElementCmsRepository $menuElementCmsRepository;
+
+    /*
      * @var Is_mainmenu
      */
     private \Is_mainmenu $module;
@@ -61,6 +68,7 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
         MenuElementHtmlRepository $menuElementHtmlRepository,
         MenuElementCategoryRepository $menuElementCategoryRepository,
         MenuElementBannerRepository $menuElementBannerRepository,
+        MenuElementCmsRepository $menuElementCmsRepository,
         \Is_mainmenu $module,
         Context $contextAdapter
     ) {
@@ -69,6 +77,7 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
         $this->menuElementHtmlRepository = $menuElementHtmlRepository;
         $this->menuElementCategoryRepository = $menuElementCategoryRepository;
         $this->menuElementBannerRepository = $menuElementBannerRepository;
+        $this->menuElementCmsRepository = $menuElementCmsRepository;
         $this->module = $module;
         $this->contextAdapter = $contextAdapter;
     }
@@ -95,22 +104,25 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
         ];
 
         $parentMenuElement = $menuElement->getParentMenuElement();
+
         if ($parentMenuElement instanceof MenuElement) {
             $data['id_parent_element'] = $parentMenuElement->getId();
         }
 
         switch ($menuElement->getType()) {
             case MenuElement::TYPE_LINK:
-                $data = [...$data, ...$this->getCustomElementData($id)];
+                $data = array_merge($data, $this->getCustomElementData($id));
                 break;
             case MenuElement::TYPE_CATEGORY:
-                $data = [...$data, ...$this->getCategoryElementData($id)];
+                $data = array_merge($data, $this->getCategoryElementData($id));
                 break;
             case MenuElement::TYPE_BANNER:
-                $data = [...$data, ...$this->getBannerElementData($id)];
+                $data = array_merge($data, $this->getBannerElementData($id));
                 break;
             case MenuElement::TYPE_HTML:
-                $data = [...$data, ...$this->getHtmlElementData($id)];
+                $data = array_merge($data, $this->getHtmlElementData($id));
+            case MenuElement::TYPE_CMS:
+                $data = array_merge($data, $this->getCMSElementData($id));
                 break;
         }
 
@@ -134,6 +146,28 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
 
                 $data['custom_name'][$lang->getId()] = $element->getName();
                 $data['content'][$lang->getId()] = $element->getContent();
+            }
+        }
+
+        return $data;
+    }
+
+    private function getCMSElementData($id): array
+    {
+        $data = [];
+        $menuElementCms = $this->menuElementCmsRepository->findOneBy([
+            'menuElement' => $id,
+        ]);
+
+        if ($menuElementCms instanceof MenuElementCms) {
+            $menuElementCmsLang = $menuElementCms->getMenuElementCmsLangs();
+            $data['id_cms'] = $menuElementCms->getIdCMS();
+            $data['custom_name'] = [];
+
+            foreach ($menuElementCmsLang as $element) {
+                $lang = $element->getLang();
+
+                $data['custom_name'][$lang->getId()] = $element->getName();
             }
         }
 

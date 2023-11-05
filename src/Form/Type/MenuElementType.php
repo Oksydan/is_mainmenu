@@ -6,6 +6,7 @@ namespace Oksydan\IsMainMenu\Form\Type;
 
 use Oksydan\IsMainMenu\Entity\MenuELement;
 use Oksydan\IsMainMenu\Form\ChoiceProvider\MenuTypeChoiceProvider;
+use Oksydan\IsMainMenu\Form\ChoiceProvider\CMSPagesChoiceProvider;
 use Oksydan\IsMainMenu\Translations\TranslationDomains;
 use PrestaShop\PrestaShop\Adapter\Feature\MultistoreFeature;
 use PrestaShopBundle\Form\Admin\Type\CategoryChoiceTreeType;
@@ -38,16 +39,23 @@ class MenuElementType extends TranslatorAwareType
      */
     private MenuTypeChoiceProvider $menuTypeChoiceProvider;
 
+    /*
+     * @var CMSPagesChoiceProvider
+     */
+    private CMSPagesChoiceProvider $cmsPagesChoiceProvider;
+
     public function __construct(
         TranslatorInterface $translator,
         array $locales,
         MultistoreFeature $multistoreFeature,
-        MenuTypeChoiceProvider $menuTypeChoiceProvider
+        MenuTypeChoiceProvider $menuTypeChoiceProvider,
+        CMSPagesChoiceProvider $cmsPagesChoiceProvider
     ) {
         parent::__construct($translator, $locales);
 
         $this->multistoreFeature = $multistoreFeature;
         $this->menuTypeChoiceProvider = $menuTypeChoiceProvider;
+        $this->cmsPagesChoiceProvider = $cmsPagesChoiceProvider;
     }
 
     /**
@@ -72,6 +80,9 @@ class MenuElementType extends TranslatorAwareType
                     break;
                 case MenuElement::TYPE_HTML:
                     $builder = $this->buildHtmlType($builder, $options);
+                    break;
+                case MenuElement::TYPE_CMS:
+                    $builder = $this->buildCMSType($builder, $options);
                     break;
                 default:
                     throw new \Exception('Unknown type: ' . $options['data']['menu_element']['type'] . ' for menu element');
@@ -196,6 +207,24 @@ class MenuElementType extends TranslatorAwareType
                 'label' => $this->trans('Content', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
                 'locales' => $this->locales,
                 'required' => true,
+            ]);
+
+        return $builder;
+    }
+
+    private function buildCMSType(FormBuilderInterface $builder, array $options): FormBuilderInterface
+    {
+        $builder
+            ->add('custom_name', TranslatableType::class, [
+                'type' => TextType::class,
+                'label' => $this->trans('Content title', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'locales' => $this->locales,
+                'required' => true,
+            ])
+            ->add('id_cms', ChoiceType::class, [
+                'required' => true,
+                'label' => $this->trans('CMS page', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'choices' => $this->cmsPagesChoiceProvider->getChoices(),
             ]);
 
         return $builder;

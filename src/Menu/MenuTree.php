@@ -6,6 +6,7 @@ use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Presenter\MenuElementPresenter;
 use Oksydan\IsMainMenu\Repository\MenuElementBannerRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCategoryRepository;
+use Oksydan\IsMainMenu\Repository\MenuElementCmsRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCustomRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementHtmlRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
@@ -33,6 +34,11 @@ class MenuTree
     private MenuElementCategoryRepository $menuElementCategoryRepository;
 
     /**
+     * @var MenuElementCmsRepository
+     */
+    private MenuElementCmsRepository $menuElementCmsRepository;
+
+    /**
      * @var MenuElementCustomRepository
      */
     private MenuElementCustomRepository $menuElementCustomRepository;
@@ -53,6 +59,7 @@ class MenuTree
         MenuElementBannerRepository $menuElementBannerRepository,
         MenuElementCategoryRepository $menuElementCategoryRepository,
         MenuElementCustomRepository $menuElementCustomRepository,
+        MenuElementCmsRepository $menuElementCmsRepository,
         MenuElementPresenter $menuElementPresenter,
         \Context $context
     ) {
@@ -61,6 +68,7 @@ class MenuTree
         $this->menuElementBannerRepository = $menuElementBannerRepository;
         $this->menuElementCategoryRepository = $menuElementCategoryRepository;
         $this->menuElementCustomRepository = $menuElementCustomRepository;
+        $this->menuElementCmsRepository = $menuElementCmsRepository;
         $this->menuElementPresenter = $menuElementPresenter;
         $this->context = $context;
     }
@@ -107,6 +115,8 @@ class MenuTree
                 return $this->menuElementCustomRepository->findMenuElementCustomByMenuElement($menuElement);
             case MenuElement::TYPE_CATEGORY:
                 return $this->menuElementCategoryRepository->findMenuElementCategoryByMenuElement($menuElement);
+            case MenuElement::TYPE_CMS:
+                return $this->menuElementCmsRepository->findMenuElementCmsByMenuElement($menuElement);
         }
 
         return null;

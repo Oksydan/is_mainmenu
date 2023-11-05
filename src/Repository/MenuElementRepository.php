@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace Oksydan\IsMainMenu\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Oksydan\IsMainMenu\Entity\MenuElement;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-class MenuElementRepository extends EntityRepository
+class MenuElementRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, MenuElement::class);
+    }
+
     public function getHighestPosition(MenuElement $parentMenuElement): int
     {
         $position = 0;

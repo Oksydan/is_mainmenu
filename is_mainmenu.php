@@ -34,7 +34,7 @@ class Is_mainmenu extends Module
 
         $this->displayName = 'Main menu module';
         $this->description = 'Main menu module';
-        $this->ps_versions_compliancy = ['min' => '8.0.0', 'max' => _PS_VERSION_];
+        $this->ps_versions_compliancy = ['min' => '8.1.0', 'max' => _PS_VERSION_];
     }
 
     private function getModuleInstaller(): ModuleInstaller

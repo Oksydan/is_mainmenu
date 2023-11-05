@@ -6,6 +6,7 @@ use Is_mainmenu;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Entity\MenuElementBanner;
 use Oksydan\IsMainMenu\Entity\MenuElementCategory;
+use Oksydan\IsMainMenu\Entity\MenuElementCms;
 use Oksydan\IsMainMenu\Entity\MenuElementCustom;
 use Oksydan\IsMainMenu\Entity\MenuElementHtml;
 use Oksydan\IsMainMenu\Entity\MenuElementRelatedEntityInterface;
@@ -36,16 +37,19 @@ class MenuElementPresenter implements PresenterInterface
 
         switch ($menuElement->getType()) {
             case MenuElement::TYPE_CATEGORY:
-                $elementPresented = [...$elementPresented, ...$this->assignCategoryData($relatedMenuElement)];
+                $elementPresented = array_merge($elementPresented, $this->assignCategoryData($relatedMenuElement));
                 break;
             case MenuElement::TYPE_HTML:
-                $elementPresented = [...$elementPresented, ...$this->assignHtmlData($relatedMenuElement)];
+                $elementPresented = array_merge($elementPresented, $this->assignHtmlData($relatedMenuElement));
                 break;
             case MenuElement::TYPE_BANNER:
-                $elementPresented = [...$elementPresented, ...$this->assignBannerData($relatedMenuElement)];
+                $elementPresented = array_merge($elementPresented, $this->assignBannerData($relatedMenuElement));
                 break;
             case MenuElement::TYPE_LINK:
-                $elementPresented = [...$elementPresented, ...$this->assignCustomData($relatedMenuElement)];
+                $elementPresented = array_merge($elementPresented, $this->assignCustomData($relatedMenuElement));
+                break;
+            case MenuElement::TYPE_CMS:
+                $elementPresented = array_merge($elementPresented, $this->assignCmsData($relatedMenuElement));
                 break;
         }
 
@@ -110,6 +114,16 @@ class MenuElementPresenter implements PresenterInterface
         ];
     }
 
+    private function assignCmsData(MenuElementCms $menuElementCms)
+    {
+        $menuElementCmsLang = $menuElementCms->getMenuElementCmsLangsByLangId($this->context->language->id);
+
+        return [
+            'url' => $this->context->link->getCMsLink($menuElementCms->getIdCMS()),
+            'title' => $menuElementCmsLang->getName(),
+        ];
+    }
+
     private function assignDefaultData(MenuElement $menuElement)
     {
         return [
@@ -119,4 +133,5 @@ class MenuElementPresenter implements PresenterInterface
             'depth' => $menuElement->getDepth(),
         ];
     }
+
 }

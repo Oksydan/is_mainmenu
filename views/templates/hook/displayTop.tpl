@@ -26,15 +26,19 @@
     {/if}
 {/function}
 
+{function renderMenuLink menuElement=[]}
+  <li class="mt-3">
+    <a href="{$child.url}" class="main-menu__sub-link">
+        {$child.title}
+    </a>
+  </li>
+{/function}
+
 {function renderSubmenuColumnLinks menuElement=[]}
     <ul class="mb-0 mt-3">
         {foreach $menuElement.children as $child}
-            {if in_array($child.type, ['category', 'custom'])}
-                <li class="mt-3">
-                    <a href="{$child.url}" class="main-menu__sub-link">
-                        {$child.title}
-                    </a>
-                </li>
+            {if in_array($child.type, ['category', 'custom', 'cms'])}
+                {renderMenuLink menuElement=$child}
             {elseif $child.type === 'banner'}
                 {renderSubmenuBanner menuElement=$child}
             {elseif $child.type === 'html'}
