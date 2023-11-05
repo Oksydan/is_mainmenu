@@ -12,6 +12,12 @@
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
 
 {% block content %}
+
+    {% block menu_list_breadcrumb %}
+      {%  include '@Modules/is_mainmenu/views/templates/admin/partials/breadcrumb.html.twig' %}
+    {% endblock %}
+
+
     {% include '@PrestaShop/Admin/Common/Grid/grid_panel.html.twig' with {'grid': menuGrid} %}
     {% if backToParentUrl is defined %}
         <div class="mt-3">

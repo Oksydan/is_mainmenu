@@ -18,7 +18,7 @@ abstract class AbstractHook implements HookInterface
 
     public function __construct(
         \Is_mainmenu $module,
-        \Context $context,
+        \Context $context
     ) {
         $this->module = $module;
         $this->context = $context;

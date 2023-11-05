@@ -31,7 +31,7 @@ class MenuElementCategoryDataHandler implements RelatedEntitiesFormDataHandlerIn
     public function __construct(
         MenuElementCategoryRepository $menuElementCategoryRepository,
         LangRepository $langRepository,
-        array $languages,
+        array $languages
     ) {
         $this->menuElementCategoryRepository = $menuElementCategoryRepository;
         $this->langRepository = $langRepository;

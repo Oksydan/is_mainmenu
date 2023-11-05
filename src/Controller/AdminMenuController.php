@@ -12,6 +12,7 @@ use Oksydan\IsMainMenu\Form\Type\MenuElementType;
 use Oksydan\IsMainMenu\Handler\MenuElement\DeleteMenuElementHandler;
 use Oksydan\IsMainMenu\Handler\MenuElement\ToggleMenuElementStatusHandler;
 use Oksydan\IsMainMenu\Handler\MenuElement\UpdateMenuElementPositionHandler;
+use Oksydan\IsMainMenu\Provider\MenuListBreadcrumbDataProvider;
 use Oksydan\IsMainMenu\Translations\TranslationDomains;
 use PrestaShop\PrestaShop\Core\Grid\Position\Exception\PositionDataException;
 use PrestaShop\PrestaShop\Core\Grid\Position\Exception\PositionUpdateException;
@@ -43,8 +44,11 @@ class AdminMenuController extends FrameworkBundleAdminController
         ]);
     }
 
-    public function listAction(Request $request, MenuListFilters $filters, int $menuItemId): Response
-    {
+    public function listAction(
+        Request $request,
+        MenuListFilters $filters,
+        int $menuItemId
+    ): Response {
         $addNewLink = $this->generateUrl('is_mainmenu_controller_add', ['menuItemId' => $menuItemId]);
         $menuGridFactory = $this->get('oksydan.is_mainmenu.grid.menu_list_grid_factory');
 
@@ -59,6 +63,8 @@ class AdminMenuController extends FrameworkBundleAdminController
         }
 
         $filters->addFilter(['id_parent_menu_element' => $menuItemId]);
+        $menuElement = $this->get('oksydan.is_mainmenu.menu_element_repository')->find($menuItemId);
+        $menuListBreadcrumbDataProvider = $this->get(MenuListBreadcrumbDataProvider::class);
 
         $menuGrid = $menuGridFactory->getGrid($filters);
 
@@ -67,7 +73,9 @@ class AdminMenuController extends FrameworkBundleAdminController
             'menuGrid' => $this->presentGrid($menuGrid),
             'newMenuElementUrl' => $addNewLink,
             'backToParentUrl' => $this->getBackToParentElementUrl((int) $menuItemId),
+            'currentMenuElementId' => $menuItemId,
             'listTitle' => $this->getListTitle((int) $menuItemId),
+            'breadcrumb' => $menuListBreadcrumbDataProvider->provide($menuElement),
         ]);
     }
 

@@ -67,4 +67,9 @@ class MenuElementRepository extends EntityRepository
 
         return $result ?? [];
     }
+
+    public function getElementParent(MenuElement $menuElement): MenuElement
+    {
+        return $menuElement->getParentMenuElement();
+    }
 }
