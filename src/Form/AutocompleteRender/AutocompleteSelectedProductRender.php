@@ -3,7 +3,7 @@
 namespace Oksydan\IsMainMenu\Form\AutocompleteRender;
 
 use Oksydan\IsMainMenu\Presenter\Product\ProductAutocompletePresenter;
-use Oksydan\IsMainMenu\Repository\ProductLegacyRepository;
+use Oksydan\IsMainMenu\LegacyRepository\ProductLegacyRepository;
 use Twig\Environment;
 
 class AutocompleteSelectedProductRender implements RenderInterface

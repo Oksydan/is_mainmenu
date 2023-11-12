@@ -2,7 +2,7 @@
 
 namespace Oksydan\IsMainMenu\Presenter\Product;
 
-use Oksydan\IsMainMenu\Repository\ProductLegacyRepository;
+use Oksydan\IsMainMenu\LegacyRepository\ProductLegacyRepository;
 
 class ProductAutocompletePresenter implements ProductAutocompletePresenterInterface
 {

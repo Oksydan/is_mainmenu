@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Oksydan\IsMainMenu\Repository;
+namespace Oksydan\IsMainMenu\LegacyRepository;
 
 use Doctrine\DBAL\Connection;
 
@@ -137,5 +137,22 @@ class ProductLegacyRepository
         $result = $qb->execute()->fetchAllAssociative();
 
         return $result[0]['id_image'] ?? 0;
+    }
+
+    public function isProductActiveForStoreAndVisible($idProduct, $idStore): bool
+    {
+        $qb = $this->connection->createQueryBuilder()
+            ->select('p.id_product')
+            ->from($this->table, 'p')
+            ->leftJoin('p', $this->dbPrefix . 'product_shop', 'ps', 'ps.id_product = p.id_product')
+            ->andWhere('p.id_product = :id_product')
+            ->andWhere('ps.id_shop = :id_shop')
+            ->andWhere('ps.active = 1')
+            ->andWhere('ps.visibility IN (:visibility)')
+            ->setParameter('visibility', ['both', 'catalog'], \Doctrine\DBAL\Connection::PARAM_STR_ARRAY)
+            ->setParameter('id_product', $idProduct)
+            ->setParameter('id_shop', $idStore);
+
+        return !empty($qb->execute()->fetchAllAssociative());
     }
 }

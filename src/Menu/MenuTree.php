@@ -3,6 +3,13 @@
 namespace Oksydan\IsMainMenu\Menu;
 
 use Oksydan\IsMainMenu\Entity\MenuElement;
+use Oksydan\IsMainMenu\Entity\MenuElementCategory;
+use Oksydan\IsMainMenu\Entity\MenuElementCms;
+use Oksydan\IsMainMenu\Entity\MenuElementProduct;
+use Oksydan\IsMainMenu\Entity\MenuElementRelatedEntityInterface;
+use Oksydan\IsMainMenu\LegacyRepository\CategoryLegacyRepository;
+use Oksydan\IsMainMenu\LegacyRepository\CmsLegacyRepository;
+use Oksydan\IsMainMenu\LegacyRepository\ProductLegacyRepository;
 use Oksydan\IsMainMenu\Presenter\Menu\MenuElementPresenter;
 use Oksydan\IsMainMenu\Repository\MenuElementBannerRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCategoryRepository;
@@ -49,6 +56,21 @@ class MenuTree
      */
     private MenuElementProductRepository $menuElementProductRepository;
 
+    /**
+     * @var CategoryLegacyRepository
+     */
+    private CategoryLegacyRepository $categoryLegacyRepository;
+
+    /**
+     * @var CmsLegacyRepository
+     */
+    private CmsLegacyRepository $cmsLegacyRepository;
+
+    /**
+     * @var ProductLegacyRepository
+     */
+    private ProductLegacyRepository $productLegacyRepository;
+
     /*
      * @var MenuElementPresenter
      */
@@ -67,6 +89,9 @@ class MenuTree
         MenuElementCustomRepository $menuElementCustomRepository,
         MenuElementCmsRepository $menuElementCmsRepository,
         MenuElementProductRepository $menuElementProductRepository,
+        CategoryLegacyRepository $categoryLegacyRepository,
+        CmsLegacyRepository $cmsLegacyRepository,
+        ProductLegacyRepository $productLegacyRepository,
         MenuElementPresenter $menuElementPresenter,
         \Context $context
     ) {
@@ -78,6 +103,9 @@ class MenuTree
         $this->menuElementCmsRepository = $menuElementCmsRepository;
         $this->menuElementPresenter = $menuElementPresenter;
         $this->menuElementProductRepository = $menuElementProductRepository;
+        $this->categoryLegacyRepository = $categoryLegacyRepository;
+        $this->cmsLegacyRepository = $cmsLegacyRepository;
+        $this->productLegacyRepository = $productLegacyRepository;
         $this->context = $context;
     }
 
@@ -96,7 +124,7 @@ class MenuTree
         foreach ($children as $child) {
             $relatedMenuElement = $this->getRelatedMenuElementByMenuElement($child);
 
-            if ($relatedMenuElement) {
+            if ($relatedMenuElement && $this->shouldBeElementDisplayedForStore($relatedMenuElement)) {
                 $tree[] = [
                     ...$this->menuElementPresenter->present($child, $relatedMenuElement),
                     'children' => $this->buildMenuTreeRecursively($child),
@@ -110,6 +138,30 @@ class MenuTree
     private function getElementChildren(MenuElement $menuElement): array
     {
         return $this->menuElementRepository->getActiveMenuElementChildrenByStoreId($menuElement, $this->context->shop->id);
+    }
+
+    private function shouldBeElementDisplayedForStore(?MenuElementRelatedEntityInterface $menuElement): bool
+    {
+        switch (get_class($menuElement)) {
+            case MenuElementCategory::class:
+                return $this->categoryLegacyRepository->isCategoryActiveAndVisible(
+                    $menuElement->getIdCategory(),
+                    $this->context->shop->id,
+                    $this->context->customer->id_default_group
+                );
+            case MenuElementCms::class:
+                return $this->cmsLegacyRepository->isCmsPageAciveForStore(
+                    $menuElement->getIdCms(),
+                    $this->context->shop->id
+                );
+            case MenuElementProduct::class:
+                return $this->productLegacyRepository->isProductActiveForStoreAndVisible(
+                    $menuElement->getIdProduct(),
+                    $this->context->shop->id
+                );
+        }
+
+        return true;
     }
 
     private function getRelatedMenuElementByMenuElement(MenuElement $menuElement)
