@@ -1,8 +1,3 @@
+.autocomplete-product-widget{position:relative}.menu-product-autocomplete{position:absolute;top:100%;left:0;right:0;max-height:300px;overflow-y:auto;background:#fff;border:1px solid #bbcdd2;z-index:99}.menu-product-autocomplete__item{padding:.625rem .938rem;display:flex;align-items:center;cursor:pointer}.menu-product-autocomplete__item:not(:last-child){border-bottom:1px solid #bbcdd2}.menu-product-autocomplete__item:hover{background:#f4fcfd}.menu-product-autocomplete__image{max-width:50px;height:auto;margin-right:10px}.locale-input-group .dropdown{flex-shrink:0}.locale-input-group{flex-wrap:nowrap}
 
-.locale-input-group .dropdown {
-    flex-shrink: 0;
-}
-
-.locale-input-group {
-    flex-wrap: nowrap;
-}
+/*# sourceMappingURL=form.css.map*/

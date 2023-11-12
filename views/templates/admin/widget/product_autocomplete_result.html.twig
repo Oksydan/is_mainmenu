@@ -1,0 +1,21 @@
+<div class="card mt-3 ">
+  <div class="card-header p-2">
+    <p class="h4 mb-0">
+      {{ 'Selected product:'|trans({}, constant('Oksydan\\IsMainMenu\\Translations\\TranslationDomains::TRANSLATION_DOMAIN_ADMIN')) }}
+    </p>
+  </div>
+  <div class="card-body p-2">
+    <div class="row align-items-center flex-nowrap mx-n2">
+      <div class="col-2 px-2">
+        {% if product.image is not empty %}
+          <img src="{{ product.image }}" class="img-fluid">
+        {% endif %}
+      </div>
+      <div class="col px-2">
+        <p class="mb-0 h4">
+          {{ product.name }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

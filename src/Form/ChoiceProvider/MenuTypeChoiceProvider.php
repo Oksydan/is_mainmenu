@@ -50,6 +50,9 @@ class MenuTypeChoiceProvider implements FormChoiceProviderInterface
             case MenuElement::TYPE_CMS:
                 $label = $this->translator->trans('CMS', [], TranslationDomains::TRANSLATION_DOMAIN_ADMIN);
                 break;
+            case MenuElement::TYPE_PRODUCT:
+                $label = $this->translator->trans('Product', [], TranslationDomains::TRANSLATION_DOMAIN_ADMIN);
+                break;
             default:
                 throw new \Exception('Unknown type: ' . $type . ' for menu element');
         }

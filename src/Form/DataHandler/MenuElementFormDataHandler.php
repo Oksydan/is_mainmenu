@@ -32,6 +32,13 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
      */
     private MenuElementHtmlDataHandler $menuElementHtmlDataHandler;
 
+    /*
+     * @var MenuElementCmsDataHandler
+     */
+    private MenuElementCmsDataHandler $menuElementCmsDataHandler;
+
+    private MenuElementProductDataHandler $menuElementProductDataHandler;
+
     /**
      * @var EntityManagerInterface
      */
@@ -48,6 +55,7 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
         MenuElementCustomDataHandler $menuElementCustomDataHandler,
         MenuElementHtmlDataHandler $menuElementHtmlDataHandler,
         MenuElementCmsDataHandler $menuElementCmsDataHandler,
+        MenuElementProductDataHandler $menuElementProductDataHandler,
         EntityManagerInterface $entityManager,
         MenuElementRepository $menuElementRepository
     ) {
@@ -56,6 +64,7 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
         $this->menuElementCustomDataHandler = $menuElementCustomDataHandler;
         $this->menuElementHtmlDataHandler = $menuElementHtmlDataHandler;
         $this->menuElementCmsDataHandler = $menuElementCmsDataHandler;
+        $this->menuElementProductDataHandler = $menuElementProductDataHandler;
         $this->entityManager = $entityManager;
         $this->menuElementRepository = $menuElementRepository;
     }
@@ -117,6 +126,9 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
                 break;
             case MenuELement::TYPE_CMS:
                 $menuRelatedElement = $this->menuElementCmsDataHandler->handle($menuElement, $data);
+                break;
+            case MenuELement::TYPE_PRODUCT:
+                $menuRelatedElement = $this->menuElementProductDataHandler->handle($menuElement, $data);
                 break;
         }
 

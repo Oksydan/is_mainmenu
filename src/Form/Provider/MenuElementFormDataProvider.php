@@ -11,11 +11,13 @@ use Oksydan\IsMainMenu\Entity\MenuElementCategory;
 use Oksydan\IsMainMenu\Entity\MenuElementCms;
 use Oksydan\IsMainMenu\Entity\MenuElementCustom;
 use Oksydan\IsMainMenu\Entity\MenuElementHtml;
+use Oksydan\IsMainMenu\Entity\MenuElementProduct;
 use Oksydan\IsMainMenu\Repository\MenuElementBannerRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCategoryRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCmsRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCustomRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementHtmlRepository;
+use Oksydan\IsMainMenu\Repository\MenuElementProductRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use PrestaShop\PrestaShop\Adapter\Shop\Context;
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\DataProvider\FormDataProviderInterface;
@@ -53,6 +55,11 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
     private MenuElementCmsRepository $menuElementCmsRepository;
 
     /*
+     * @var MenuElementProductRepository
+     */
+    private MenuElementProductRepository $menuElementProductRepository;
+
+    /*
      * @var Is_mainmenu
      */
     private \Is_mainmenu $module;
@@ -69,6 +76,7 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
         MenuElementCategoryRepository $menuElementCategoryRepository,
         MenuElementBannerRepository $menuElementBannerRepository,
         MenuElementCmsRepository $menuElementCmsRepository,
+        MenuElementProductRepository $menuElementProductRepository,
         \Is_mainmenu $module,
         Context $contextAdapter
     ) {
@@ -78,6 +86,7 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
         $this->menuElementCategoryRepository = $menuElementCategoryRepository;
         $this->menuElementBannerRepository = $menuElementBannerRepository;
         $this->menuElementCmsRepository = $menuElementCmsRepository;
+        $this->menuElementProductRepository = $menuElementProductRepository;
         $this->module = $module;
         $this->contextAdapter = $contextAdapter;
     }
@@ -125,6 +134,26 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
             case MenuElement::TYPE_CMS:
                 $data = array_merge($data, $this->getCMSElementData($id));
                 break;
+            case MenuElement::TYPE_PRODUCT:
+                $data = array_merge($data, $this->getProductElementData($id));
+                break;
+        }
+
+        return $data;
+    }
+
+    private function getProductElementData($id): array
+    {
+        $data = [];
+        $menuElementProduct = $this->menuElementProductRepository->findOneBy([
+            'menuElement' => $id,
+        ]);
+
+        if ($menuElementProduct instanceof MenuElementProduct) {
+            $data['product'] = [
+                'id_product' => $menuElementProduct->getIdProduct(),
+                'id_product_attribute' => $menuElementProduct->getIdProductAttribute(),
+            ];
         }
 
         return $data;
@@ -274,6 +303,10 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
             'position' => 0,
             'id_parent_element' => $this->menuElementRepository->getRootElement()->getId(),
             'shop_association' => $this->contextAdapter->getContextListShopID(),
+            'product' => [
+                'id_product' => 0,
+                'id_product_attribute' => 0,
+            ],
         ];
     }
 }

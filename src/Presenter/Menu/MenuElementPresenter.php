@@ -1,6 +1,6 @@
 <?php
 
-namespace Oksydan\IsMainMenu\Presenter;
+namespace Oksydan\IsMainMenu\Presenter\Menu;
 
 use Is_mainmenu;
 use Oksydan\IsMainMenu\Entity\MenuElement;
@@ -11,7 +11,7 @@ use Oksydan\IsMainMenu\Entity\MenuElementCustom;
 use Oksydan\IsMainMenu\Entity\MenuElementHtml;
 use Oksydan\IsMainMenu\Entity\MenuElementRelatedEntityInterface;
 
-class MenuElementPresenter implements PresenterInterface
+class MenuElementPresenter implements MenuElementPresenterInterface
 {
     /*
      * @var \Context

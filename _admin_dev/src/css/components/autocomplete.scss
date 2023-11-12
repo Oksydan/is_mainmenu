@@ -1,0 +1,37 @@
+.autocomplete-product-widget {
+  position: relative;
+}
+
+
+.menu-product-autocomplete {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #bbcdd2;
+  z-index: 99;
+
+  &__item {
+    padding: 0.625rem	0.938rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #bbcdd2;
+    }
+
+    &:hover {
+      background: #f4fcfd;
+    }
+  }
+
+  &__image {
+    max-width: 50px;
+    height: auto;
+    margin-right: 10px;
+  }
+}

@@ -24,6 +24,8 @@ class MenuElement
 
     const TYPE_CMS = 'cms';
 
+    const TYPE_PRODUCT = 'product';
+
     // USED ONLY FOR ROOT ELEMENT
     const TYPE_ROOT = 'root';
 
@@ -33,6 +35,7 @@ class MenuElement
         self::TYPE_BANNER,
         self::TYPE_HTML,
         self::TYPE_CMS,
+        self::TYPE_PRODUCT,
     ];
 
     /**

@@ -40,3 +40,14 @@ is_mainmenu_controller_update_position:
     defaults:
         _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuController::updatePositionAction'
 
+is_mainmenu_api_controller_product_autocomplete:
+    path: /is_mainmenu/api/autocomplete
+    methods: [POST]
+    defaults:
+        _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuAPIController::productAutocompleteAction'
+
+is_mainmenu_api_controller_product_selected:
+    path: /is_mainmenu/api/select_product
+    methods: [POST]
+    defaults:
+        _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuAPIController::selectedProductAction'

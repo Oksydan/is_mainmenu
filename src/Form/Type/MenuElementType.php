@@ -21,9 +21,11 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Oksydan\IsMainMenu\Form\Type\ProductAutocompleteType;
 
 class MenuElementType extends TranslatorAwareType
 {
@@ -44,18 +46,22 @@ class MenuElementType extends TranslatorAwareType
      */
     private CMSPagesChoiceProvider $cmsPagesChoiceProvider;
 
+    private RouterInterface $router;
+
     public function __construct(
         TranslatorInterface $translator,
         array $locales,
         MultistoreFeature $multistoreFeature,
         MenuTypeChoiceProvider $menuTypeChoiceProvider,
-        CMSPagesChoiceProvider $cmsPagesChoiceProvider
+        CMSPagesChoiceProvider $cmsPagesChoiceProvider,
+        RouterInterface $router
     ) {
         parent::__construct($translator, $locales);
 
         $this->multistoreFeature = $multistoreFeature;
         $this->menuTypeChoiceProvider = $menuTypeChoiceProvider;
         $this->cmsPagesChoiceProvider = $cmsPagesChoiceProvider;
+        $this->router = $router;
     }
 
     /**
@@ -83,6 +89,9 @@ class MenuElementType extends TranslatorAwareType
                     break;
                 case MenuElement::TYPE_CMS:
                     $builder = $this->buildCMSType($builder, $options);
+                    break;
+                case MenuElement::TYPE_PRODUCT:
+                    $builder = $this->buildProductType($builder, $options);
                     break;
                 default:
                     throw new \Exception('Unknown type: ' . $options['data']['menu_element']['type'] . ' for menu element');
@@ -225,6 +234,19 @@ class MenuElementType extends TranslatorAwareType
                 'required' => true,
                 'label' => $this->trans('CMS page', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
                 'choices' => $this->cmsPagesChoiceProvider->getChoices(),
+            ]);
+
+        return $builder;
+    }
+
+    private function buildProductType(FormBuilderInterface $builder, array $options): FormBuilderInterface
+    {
+        $builder
+            ->add('product', ProductAutocompleteType::class, [
+                'label' => $this->trans('Product autocomplete', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'required' => true,
+                'autocomplete_url' => $this->router->generate('is_mainmenu_api_controller_product_autocomplete'),
+                'selected_product_url' => $this->router->generate('is_mainmenu_api_controller_product_selected'),
             ]);
 
         return $builder;

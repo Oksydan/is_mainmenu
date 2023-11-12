@@ -3,7 +3,7 @@
 namespace Oksydan\IsMainMenu\Menu;
 
 use Oksydan\IsMainMenu\Entity\MenuElement;
-use Oksydan\IsMainMenu\Presenter\MenuElementPresenter;
+use Oksydan\IsMainMenu\Presenter\Menu\MenuElementPresenter;
 use Oksydan\IsMainMenu\Repository\MenuElementBannerRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCategoryRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCmsRepository;
