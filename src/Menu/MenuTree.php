@@ -9,6 +9,7 @@ use Oksydan\IsMainMenu\Repository\MenuElementCategoryRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCmsRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCustomRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementHtmlRepository;
+use Oksydan\IsMainMenu\Repository\MenuElementProductRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 
 class MenuTree
@@ -43,6 +44,11 @@ class MenuTree
      */
     private MenuElementCustomRepository $menuElementCustomRepository;
 
+    /**
+     * @var MenuElementProductRepository
+     */
+    private MenuElementProductRepository $menuElementProductRepository;
+
     /*
      * @var MenuElementPresenter
      */
@@ -60,6 +66,7 @@ class MenuTree
         MenuElementCategoryRepository $menuElementCategoryRepository,
         MenuElementCustomRepository $menuElementCustomRepository,
         MenuElementCmsRepository $menuElementCmsRepository,
+        MenuElementProductRepository $menuElementProductRepository,
         MenuElementPresenter $menuElementPresenter,
         \Context $context
     ) {
@@ -70,6 +77,7 @@ class MenuTree
         $this->menuElementCustomRepository = $menuElementCustomRepository;
         $this->menuElementCmsRepository = $menuElementCmsRepository;
         $this->menuElementPresenter = $menuElementPresenter;
+        $this->menuElementProductRepository = $menuElementProductRepository;
         $this->context = $context;
     }
 
@@ -117,6 +125,8 @@ class MenuTree
                 return $this->menuElementCategoryRepository->findMenuElementCategoryByMenuElement($menuElement);
             case MenuElement::TYPE_CMS:
                 return $this->menuElementCmsRepository->findMenuElementCmsByMenuElement($menuElement);
+            case MenuElement::TYPE_PRODUCT:
+                return $this->menuElementProductRepository->findMenuElementProductByMenuElement($menuElement);
         }
 
         return null;

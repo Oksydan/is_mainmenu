@@ -27,41 +27,45 @@
 {/function}
 
 {function renderMenuLink menuElement=[]}
-  <li class="mt-3">
-    <a href="{$child.url}" class="main-menu__sub-link">
-        {$child.title}
+  <div>
+    <a href="{$menuElement.url}" class="main-menu__sub-link">
+        {$menuElement.title}
     </a>
-  </li>
+  </div>
 {/function}
 
-{function renderSubmenuColumnLinks menuElement=[]}
-    <ul class="mb-0 mt-3">
-        {foreach $menuElement.children as $child}
-            {if in_array($child.type, ['category', 'custom', 'cms'])}
-                {renderMenuLink menuElement=$child}
-            {elseif $child.type === 'banner'}
-                {renderSubmenuBanner menuElement=$child}
-            {elseif $child.type === 'html'}
-                {renderSubmenuHtml menuElement=$child}
-            {/if}
+{function renderProduct menuElement=[]}
+  {if !empty($menuElement.product)}
+      <a href="{$menuElement.product.url}" class="main-menu__sub-link">
+        {$menuElement.product.name}
+      </a>
+  {/if}
+{/function}
 
-            {if $child.children}
-                {renderSubmenuColumnLinks menuElement=$child}
-            {/if}
-        {/foreach}
-    </ul>
+{function renderSubmenuColumnContent menuElement=[]}
+    {if in_array($child.type, ['category', 'custom', 'cms'])}
+        {renderMenuLink menuElement=$child}
+    {elseif $child.type === 'banner'}
+        {renderSubmenuBanner menuElement=$child}
+    {elseif $child.type === 'html'}
+        {renderSubmenuHtml menuElement=$child}
+    {elseif $child.type === 'product'}
+        {renderProduct menuElement=$child}
+    {/if}
 {/function}
 
 {function renderSubmenuColumn menuElement=[]}
-    <p class="main-menu__sub-title text-uppercase mb-lg-4 mb-3 font-weight-semibold">
-        <a href="{$menuElement.url}" class="main-menu__sub-link">
-            {$menuElement.title}
-        </a>
-    </p>
+  <div class="col">
+      {renderSubmenuColumnContent menuElement=$menuElement}
 
-    {if $menuElement.children}
-        {renderSubmenuColumnLinks menuElement=$menuElement}
-    {/if}
+      {if $child.children}
+          <div class="row">
+              {foreach $child.children as $child}
+                {renderSubmenuColumn menuElement=$child}
+              {/foreach}
+          </div>
+      {/if}
+  </div>
 {/function}
 
 {function renderSubmenu menuElement=[]}
@@ -71,19 +75,7 @@
             <div class="main-menu__sub-content">
                 <div class="main-menu__sub-list row">
                     {foreach $menuElement.children as $child}
-                        {if in_array($child.type, ['category', 'custom'])}
-                            <div class="col-lg-3 col-xxl-2 {if $child@first}offset-xl-2{/if}">
-                                {renderSubmenuColumn menuElement=$child}
-                            </div>
-                        {elseif $child.type === 'banner'}
-                            <div class="col-lg-3 ml-auto">
-                                {renderSubmenuBanner menuElement=$child}
-                            </div>
-                        {elseif $child.type === 'html'}
-                            <div class="col-lg-3 ml-auto">
-                                {renderSubmenuHtml menuElement=$child}
-                            </div>
-                        {/if}
+                        {renderSubmenuColumn menuElement=$child}
                     {/foreach}
                 </div>
             </div>
@@ -93,12 +85,12 @@
 {/function}
 
 <div class="d-none d-lg-block col-12 header-top__block header-top__block--menu position-static">
-    <div class="main-menu" id="_desktop_top_menu">
+    <div class="main-menu position-relative" id="_desktop_top_menu">
         <ul class="js-main-menu-list main-menu__list row align-items-center justify-content-center mb-0">
 
             {foreach $menu as $menuElement}
                 {if in_array($menuElement.type, ['category', 'custom'])}
-                    <li class="main-menu__item main-menu__item--{$menuElement.depth} col-auto {if $menuElement.children}js-manu-with-sub{/if}">
+                    <li class="main-menu__item main-menu__item--{$menuElement.depth} position-static col-auto {if $menuElement.children}js-manu-with-sub{/if}">
                         <a href="{$menuElement.url}" class="main-menu__link main-menu__link--{$menuElement.depth}">
                             {$menuElement.title}
                         </a>
