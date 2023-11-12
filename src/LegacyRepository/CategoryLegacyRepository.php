@@ -37,7 +37,6 @@ class CategoryLegacyRepository
         $this->table = $this->dbPrefix . 'category';
     }
 
-
     public function isCategoryActiveAndVisible(int $idCategory, int $idStore, int $idGroup): bool
     {
         $qb = $this->connection->createQueryBuilder()
@@ -55,5 +54,4 @@ class CategoryLegacyRepository
 
         return !empty($qb->execute()->fetchAllAssociative());
     }
-
 }

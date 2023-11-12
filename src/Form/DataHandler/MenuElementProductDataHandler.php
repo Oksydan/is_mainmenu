@@ -16,13 +16,8 @@ class MenuElementProductDataHandler implements RelatedEntitiesFormDataHandlerInt
      */
     private MenuElementProductRepository $menuElementProductRepository;
 
-    /*
-     * @var array
-     */
-    private array $languages;
-
     public function __construct(
-        MenuElementProductRepository $menuElementProductRepository,
+        MenuElementProductRepository $menuElementProductRepository
     ) {
         $this->menuElementProductRepository = $menuElementProductRepository;
     }

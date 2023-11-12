@@ -25,7 +25,6 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Oksydan\IsMainMenu\Form\Type\ProductAutocompleteType;
 
 class MenuElementType extends TranslatorAwareType
 {

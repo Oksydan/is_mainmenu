@@ -106,7 +106,6 @@ class ProductLegacyRepository
         return $qb->execute()->fetchAllAssociative();
     }
 
-
     public function getProductCombinationImagesForIdProductAttribute(
         int $idProduct,
         int $idProductAttribute

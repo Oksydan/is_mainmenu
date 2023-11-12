@@ -2,8 +2,8 @@
 
 namespace Oksydan\IsMainMenu\Form\AutocompleteRender;
 
-use Oksydan\IsMainMenu\Presenter\Product\ProductAutocompletePresenter;
 use Oksydan\IsMainMenu\LegacyRepository\ProductLegacyRepository;
+use Oksydan\IsMainMenu\Presenter\Product\ProductAutocompletePresenter;
 use Twig\Environment;
 
 class AutocompleteSelectedProductRender implements RenderInterface
@@ -27,7 +27,6 @@ class AutocompleteSelectedProductRender implements RenderInterface
         $this->productAutocompletePresenter = $productAutocompletePresenter;
         $this->context = $context;
     }
-
 
     public function render(array $product): string
     {

@@ -13,12 +13,10 @@ class ProductAutocompletePresenter implements ProductAutocompletePresenterInterf
     public function __construct(
         ProductLegacyRepository $productRepository,
         \Context $context
-    )
-    {
+    ) {
         $this->productRepository = $productRepository;
         $this->context = $context;
     }
-
 
     public function present(array $product): array
     {
@@ -85,6 +83,7 @@ class ProductAutocompletePresenter implements ProductAutocompletePresenterInterf
 
             $combinationsNames = array_reduce($combinations, function ($combinationReduced, $combination) {
                 $combinationReduced[] = $combination['group_name'] . ': ' . $combination['attribute_name'];
+
                 return $combinationReduced;
             }, []);
 

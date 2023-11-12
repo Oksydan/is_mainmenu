@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Oksydan\IsMainMenu\Form\Type;
 
 use Oksydan\IsMainMenu\Form\AutocompleteRender\AutocompleteSelectedProductRender;
+use Oksydan\IsMainMenu\Form\Type\DataTransformer\ProductAutocompleteDataTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Oksydan\IsMainMenu\Form\Type\DataTransformer\ProductAutocompleteDataTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,7 +20,7 @@ class ProductAutocompleteType extends AbstractType
     private AutocompleteSelectedProductRender $autocompleteSelectedProductRender;
 
     public function __construct(
-        AutocompleteSelectedProductRender $autocompleteSelectedProductRender,
+        AutocompleteSelectedProductRender $autocompleteSelectedProductRender
     ) {
         $this->autocompleteSelectedProductRender = $autocompleteSelectedProductRender;
     }

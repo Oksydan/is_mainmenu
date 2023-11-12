@@ -37,7 +37,6 @@ class CmsLegacyRepository
         $this->table = $this->dbPrefix . 'cms';
     }
 
-
     public function isCmsPageAciveForStore(int $idCategory, int $idStore): bool
     {
         $qb = $this->connection->createQueryBuilder()
@@ -52,5 +51,4 @@ class CmsLegacyRepository
 
         return !empty($qb->execute()->fetchAllAssociative());
     }
-
 }

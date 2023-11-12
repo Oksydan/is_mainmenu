@@ -6,10 +6,10 @@ namespace Oksydan\IsMainMenu\Controller;
 
 use Oksydan\IsMainMenu\Form\AutocompleteRender\AutocompleteSelectedProductRender;
 use Oksydan\IsMainMenu\Presenter\Product\ProductAutocompletePresenter;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Oksydan\IsMainMenu\Repository\ProductLegacyRepository;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminMenuAPIController extends FrameworkBundleAdminController
 {

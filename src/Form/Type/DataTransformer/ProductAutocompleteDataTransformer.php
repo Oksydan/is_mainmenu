@@ -5,8 +5,6 @@ namespace Oksydan\IsMainMenu\Form\Type\DataTransformer;
 use Oksydan\IsMainMenu\Form\AutocompleteRender\AutocompleteSelectedProductRender;
 use Symfony\Component\Form\DataTransformerInterface;
 
-
-
 class ProductAutocompleteDataTransformer implements DataTransformerInterface
 {
     /*
