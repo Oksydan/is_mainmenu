@@ -1,14 +1,3 @@
-$(document).ready(function () {
-    window.prestashop.component.initComponents(
-        [
-            'Grid',
-        ],
-    );
+(()=>{(()=>{var o={};document.addEventListener("DOMContentLoaded",()=>{window.prestashop.component.initComponents(["Grid"]);const n=new window.prestashop.component.Grid("is_mainmenu_list");n.addExtension(new window.prestashop.component.GridExtensions.AsyncToggleColumnExtension),n.addExtension(new window.prestashop.component.GridExtensions.SortingExtension),n.addExtension(new window.prestashop.component.GridExtensions.PositionExtension),n.addExtension(new window.prestashop.component.GridExtensions.SubmitRowActionExtension)}),(()=>{"use strict"})()})();})();
 
-    const imageSliderkGrid = new window.prestashop.component.Grid('is_mainmenu_list');
-
-    imageSliderkGrid.addExtension(new window.prestashop.component.GridExtensions.AsyncToggleColumnExtension());
-    imageSliderkGrid.addExtension(new window.prestashop.component.GridExtensions.SortingExtension());
-    imageSliderkGrid.addExtension(new window.prestashop.component.GridExtensions.PositionExtension());
-    imageSliderkGrid.addExtension(new window.prestashop.component.GridExtensions.SubmitRowActionExtension());
-});
+//# sourceMappingURL=grid.js.map

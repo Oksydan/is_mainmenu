@@ -14,11 +14,6 @@ services:
       $multistoreFeature: '@prestashop.adapter.multistore_feature'
       $contextAdapter: '@prestashop.adapter.shop.context'
       $dbPrefix: '%database_prefix%'
-      $menuElementRepository: '@oksydan.is_mainmenu.menu_element_repository'
-      $menuElementCustomRepository: '@oksydan.is_mainmenu.menu_element_custom_repository'
-      $menuElementHtmlRepository: '@oksydan.is_mainmenu.menu_element_html_repository'
-      $menuElementCategoryRepository: '@oksydan.is_mainmenu.menu_element_category_repository'
-      $menuElementBannerRepository: '@oksydan.is_mainmenu.menu_element_banner_repository'
       $languages: '@=service("prestashop.adapter.legacy.context").getLanguages(false)'
       $langRepository: '@prestashop.core.admin.lang.repository'
       $menuListDataFactory: '@oksydan.is_mainmenu.grid.data.factory.menu_list_data_factory'
@@ -33,7 +28,7 @@ services:
   Oksydan\IsMainMenu\:
     resource: '../../src/*'
     exclude:
-      - '../../src/{Repository,Exception,Entity,Controller}'
+      - '../../src/{Exception,Entity,Controller}'
       - '../../src/Handler/File/*'
       - '../../src/index.php'
       - '../../src/*/index.php'

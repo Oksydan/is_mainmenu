@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Oksydan\IsMainMenu\Form\DataHandler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Oksydan\IsMainMenu\Entity\MenuElement;
+use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\DataHandler\FormDataHandlerInterface;
 use PrestaShopBundle\Entity\Shop;
 
@@ -32,6 +32,13 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
      */
     private MenuElementHtmlDataHandler $menuElementHtmlDataHandler;
 
+    /*
+     * @var MenuElementCmsDataHandler
+     */
+    private MenuElementCmsDataHandler $menuElementCmsDataHandler;
+
+    private MenuElementProductDataHandler $menuElementProductDataHandler;
+
     /**
      * @var EntityManagerInterface
      */
@@ -40,20 +47,24 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
     /*
      * @var EntityRepository
      */
-    private EntityRepository $menuElementRepository;
+    private MenuElementRepository $menuElementRepository;
 
     public function __construct(
         MenuElementBannerDataHandler $menuElementBannerDataHandler,
         MenuElementCategoryDataHandler $menuElementCategoryDataHandler,
         MenuElementCustomDataHandler $menuElementCustomDataHandler,
         MenuElementHtmlDataHandler $menuElementHtmlDataHandler,
+        MenuElementCmsDataHandler $menuElementCmsDataHandler,
+        MenuElementProductDataHandler $menuElementProductDataHandler,
         EntityManagerInterface $entityManager,
-        EntityRepository $menuElementRepository
+        MenuElementRepository $menuElementRepository
     ) {
         $this->menuElementBannerDataHandler = $menuElementBannerDataHandler;
         $this->menuElementCategoryDataHandler = $menuElementCategoryDataHandler;
         $this->menuElementCustomDataHandler = $menuElementCustomDataHandler;
         $this->menuElementHtmlDataHandler = $menuElementHtmlDataHandler;
+        $this->menuElementCmsDataHandler = $menuElementCmsDataHandler;
+        $this->menuElementProductDataHandler = $menuElementProductDataHandler;
         $this->entityManager = $entityManager;
         $this->menuElementRepository = $menuElementRepository;
     }
@@ -112,6 +123,12 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
                 break;
             case MenuELement::TYPE_HTML:
                 $menuRelatedElement = $this->menuElementHtmlDataHandler->handle($menuElement, $data);
+                break;
+            case MenuELement::TYPE_CMS:
+                $menuRelatedElement = $this->menuElementCmsDataHandler->handle($menuElement, $data);
+                break;
+            case MenuELement::TYPE_PRODUCT:
+                $menuRelatedElement = $this->menuElementProductDataHandler->handle($menuElement, $data);
                 break;
         }
 

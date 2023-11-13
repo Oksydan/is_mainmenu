@@ -13,6 +13,7 @@ use Oksydan\IsMainMenu\Handler\MenuElement\DeleteMenuElementHandler;
 use Oksydan\IsMainMenu\Handler\MenuElement\ToggleMenuElementStatusHandler;
 use Oksydan\IsMainMenu\Handler\MenuElement\UpdateMenuElementPositionHandler;
 use Oksydan\IsMainMenu\Provider\MenuListBreadcrumbDataProvider;
+use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use Oksydan\IsMainMenu\Translations\TranslationDomains;
 use PrestaShop\PrestaShop\Core\Grid\Position\Exception\PositionDataException;
 use PrestaShop\PrestaShop\Core\Grid\Position\Exception\PositionUpdateException;
@@ -63,7 +64,7 @@ class AdminMenuController extends FrameworkBundleAdminController
         }
 
         $filters->addFilter(['id_parent_menu_element' => $menuItemId]);
-        $menuElement = $this->get('oksydan.is_mainmenu.menu_element_repository')->find($menuItemId);
+        $menuElement = $this->get(MenuElementRepository::class)->find($menuItemId);
         $menuListBreadcrumbDataProvider = $this->get(MenuListBreadcrumbDataProvider::class);
 
         $menuGrid = $menuGridFactory->getGrid($filters);
@@ -82,7 +83,7 @@ class AdminMenuController extends FrameworkBundleAdminController
     private function getListTitle(int $menuItemId = 0): string
     {
         if ($menuItemId > 0) {
-            $repository = $this->get('oksydan.is_mainmenu.menu_element_repository');
+            $repository = $this->get(MenuElementRepository::class);
             $menuElement = $repository->find($menuItemId);
 
             if ($menuElement instanceof MenuElement) {
@@ -95,7 +96,7 @@ class AdminMenuController extends FrameworkBundleAdminController
 
     private function getBackToParentElementUrl(int $menuItemId): string
     {
-        $repository = $this->get('oksydan.is_mainmenu.menu_element_repository');
+        $repository = $this->get(MenuElementRepository::class);
         $menuElement = $repository->find($menuItemId);
 
         if ($menuElement instanceof MenuElement) {
@@ -177,7 +178,7 @@ class AdminMenuController extends FrameworkBundleAdminController
         $form = $this->getFormFor($menuItemId);
         $form->handleRequest($request);
         $formHandler = $this->getFormHandler();
-        $repository = $this->get('oksydan.is_mainmenu.menu_element_repository');
+        $repository = $this->get(MenuElementRepository::class);
         $menuElement = $repository->find($menuItemId);
         $parentElement = $menuElement->getParentMenuElement();
         $parentId = $parentElement instanceof MenuElement ? $parentElement->getId() : $this->getRootElement()->getId();
@@ -191,7 +192,7 @@ class AdminMenuController extends FrameworkBundleAdminController
                     $this->trans('Successful edited.', 'Admin.Notifications.Success')
                 );
 
-                $repository = $this->get('oksydan.is_mainmenu.menu_element_repository');
+                $repository = $this->get(MenuElementRepository::class);
                 $menuElement = $repository->find($menuItemId);
 
                 if ($menuElement instanceof MenuElement) {
@@ -214,7 +215,7 @@ class AdminMenuController extends FrameworkBundleAdminController
 
     private function controlElementChildrenPermissions($menuElementId)
     {
-        $repository = $this->get('oksydan.is_mainmenu.menu_element_repository');
+        $repository = $this->get(MenuElementRepository::class);
         $menuElement = $repository->find($menuElementId);
 
         if ($menuElement instanceof MenuElement) {
@@ -247,7 +248,7 @@ class AdminMenuController extends FrameworkBundleAdminController
 
     public function deleteAction(Request $request, int $menuItemId): Response
     {
-        $repository = $this->get('oksydan.is_mainmenu.menu_element_repository');
+        $repository = $this->get(MenuElementRepository::class);
         $menuElement = $repository->find($menuItemId);
         $parentElement = $menuElement->getParentMenuElement();
         $parentId = $parentElement instanceof MenuElement ? $parentElement->getId() : $this->getRootElement()->getId();
@@ -343,7 +344,7 @@ class AdminMenuController extends FrameworkBundleAdminController
 
     private function getRootElement(): ?MenuElement
     {
-        $repository = $this->get('oksydan.is_mainmenu.menu_element_repository');
+        $repository = $this->get(MenuElementRepository::class);
         $menuElement = $repository->getRootElement();
 
         if ($menuElement instanceof MenuElement) {

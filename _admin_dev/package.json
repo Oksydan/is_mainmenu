@@ -1,0 +1,32 @@
+{
+  "name": "is_mainmenu_admin",
+  "label": "Main Menu Admin",
+  "version": "1.0.0",
+  "description": "Main Menu Admin",
+  "author": "Igor Stępień",
+  "scripts": {
+    "scss-lint": "stylelint \"src/**/*.scss\" --fix",
+    "scss-lint-fix": "stylelint \"src/**/*.scss\" --fix",
+    "js-lint": "eslint -c .eslintrc.js --ext .js,.vue ./src",
+    "js-lint-fix": "eslint -c .eslintrc.js --ext .js,.vue ./src --fix",
+    "build": "webpack --progress --mode=production --env stats=errors-only",
+    "watch": "webpack watch --progress --mode=development"
+  },
+  "devDependencies": {
+    "css-loader": "^6.8.1",
+    "esbuild-loader": "^4.0.2",
+    "eslint": "^8.53.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "mini-css-extract-plugin": "^2.7.6",
+    "postcss": "^8.4.31",
+    "postcss-import": "^15.1.0",
+    "postcss-loader": "^7.3.3",
+    "postcss-preset-env": "^9.3.0",
+    "sass": "^1.69.5",
+    "sass-loader": "^13.3.2",
+    "stylelint": "^15.11.0",
+    "stylelint-config-recommended-scss": "^13.1.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

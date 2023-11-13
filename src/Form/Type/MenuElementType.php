@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oksydan\IsMainMenu\Form\Type;
 
 use Oksydan\IsMainMenu\Entity\MenuELement;
+use Oksydan\IsMainMenu\Form\ChoiceProvider\CMSPagesChoiceProvider;
 use Oksydan\IsMainMenu\Form\ChoiceProvider\MenuTypeChoiceProvider;
 use Oksydan\IsMainMenu\Translations\TranslationDomains;
 use PrestaShop\PrestaShop\Adapter\Feature\MultistoreFeature;
@@ -20,6 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -38,16 +40,27 @@ class MenuElementType extends TranslatorAwareType
      */
     private MenuTypeChoiceProvider $menuTypeChoiceProvider;
 
+    /*
+     * @var CMSPagesChoiceProvider
+     */
+    private CMSPagesChoiceProvider $cmsPagesChoiceProvider;
+
+    private RouterInterface $router;
+
     public function __construct(
         TranslatorInterface $translator,
         array $locales,
         MultistoreFeature $multistoreFeature,
-        MenuTypeChoiceProvider $menuTypeChoiceProvider
+        MenuTypeChoiceProvider $menuTypeChoiceProvider,
+        CMSPagesChoiceProvider $cmsPagesChoiceProvider,
+        RouterInterface $router
     ) {
         parent::__construct($translator, $locales);
 
         $this->multistoreFeature = $multistoreFeature;
         $this->menuTypeChoiceProvider = $menuTypeChoiceProvider;
+        $this->cmsPagesChoiceProvider = $cmsPagesChoiceProvider;
+        $this->router = $router;
     }
 
     /**
@@ -72,6 +85,12 @@ class MenuElementType extends TranslatorAwareType
                     break;
                 case MenuElement::TYPE_HTML:
                     $builder = $this->buildHtmlType($builder, $options);
+                    break;
+                case MenuElement::TYPE_CMS:
+                    $builder = $this->buildCMSType($builder, $options);
+                    break;
+                case MenuElement::TYPE_PRODUCT:
+                    $builder = $this->buildProductType($builder, $options);
                     break;
                 default:
                     throw new \Exception('Unknown type: ' . $options['data']['menu_element']['type'] . ' for menu element');
@@ -196,6 +215,37 @@ class MenuElementType extends TranslatorAwareType
                 'label' => $this->trans('Content', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
                 'locales' => $this->locales,
                 'required' => true,
+            ]);
+
+        return $builder;
+    }
+
+    private function buildCMSType(FormBuilderInterface $builder, array $options): FormBuilderInterface
+    {
+        $builder
+            ->add('custom_name', TranslatableType::class, [
+                'type' => TextType::class,
+                'label' => $this->trans('Content title', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'locales' => $this->locales,
+                'required' => true,
+            ])
+            ->add('id_cms', ChoiceType::class, [
+                'required' => true,
+                'label' => $this->trans('CMS page', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'choices' => $this->cmsPagesChoiceProvider->getChoices(),
+            ]);
+
+        return $builder;
+    }
+
+    private function buildProductType(FormBuilderInterface $builder, array $options): FormBuilderInterface
+    {
+        $builder
+            ->add('product', ProductAutocompleteType::class, [
+                'label' => $this->trans('Product autocomplete', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'required' => true,
+                'autocomplete_url' => $this->router->generate('is_mainmenu_api_controller_product_autocomplete'),
+                'selected_product_url' => $this->router->generate('is_mainmenu_api_controller_product_selected'),
             ]);
 
         return $builder;

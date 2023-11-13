@@ -1,16 +1,19 @@
 <?php
 
-namespace Oksydan\IsMainMenu\Presenter;
+namespace Oksydan\IsMainMenu\Presenter\Menu;
 
 use Is_mainmenu;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Entity\MenuElementBanner;
 use Oksydan\IsMainMenu\Entity\MenuElementCategory;
+use Oksydan\IsMainMenu\Entity\MenuElementCms;
 use Oksydan\IsMainMenu\Entity\MenuElementCustom;
 use Oksydan\IsMainMenu\Entity\MenuElementHtml;
+use Oksydan\IsMainMenu\Entity\MenuElementProduct;
 use Oksydan\IsMainMenu\Entity\MenuElementRelatedEntityInterface;
+use Oksydan\IsMainMenu\Presenter\Product\ProductFrontPresenter;
 
-class MenuElementPresenter implements PresenterInterface
+class MenuElementPresenter implements MenuElementPresenterInterface
 {
     /*
      * @var \Context
@@ -22,12 +25,16 @@ class MenuElementPresenter implements PresenterInterface
      */
     private \Is_mainmenu $module;
 
+    private ProductFrontPresenter $productFrontPresenter;
+
     public function __construct(
         \Context $context,
-        \Is_mainmenu $module
+        \Is_mainmenu $module,
+        ProductFrontPresenter $productFrontPresenter
     ) {
         $this->context = $context;
         $this->module = $module;
+        $this->productFrontPresenter = $productFrontPresenter;
     }
 
     public function present(MenuElement $menuElement, MenuElementRelatedEntityInterface $relatedMenuElement): array
@@ -36,16 +43,22 @@ class MenuElementPresenter implements PresenterInterface
 
         switch ($menuElement->getType()) {
             case MenuElement::TYPE_CATEGORY:
-                $elementPresented = [...$elementPresented, ...$this->assignCategoryData($relatedMenuElement)];
+                $elementPresented = array_merge($elementPresented, $this->assignCategoryData($relatedMenuElement));
                 break;
             case MenuElement::TYPE_HTML:
-                $elementPresented = [...$elementPresented, ...$this->assignHtmlData($relatedMenuElement)];
+                $elementPresented = array_merge($elementPresented, $this->assignHtmlData($relatedMenuElement));
                 break;
             case MenuElement::TYPE_BANNER:
-                $elementPresented = [...$elementPresented, ...$this->assignBannerData($relatedMenuElement)];
+                $elementPresented = array_merge($elementPresented, $this->assignBannerData($relatedMenuElement));
                 break;
             case MenuElement::TYPE_LINK:
-                $elementPresented = [...$elementPresented, ...$this->assignCustomData($relatedMenuElement)];
+                $elementPresented = array_merge($elementPresented, $this->assignCustomData($relatedMenuElement));
+                break;
+            case MenuElement::TYPE_CMS:
+                $elementPresented = array_merge($elementPresented, $this->assignCmsData($relatedMenuElement));
+                break;
+            case MenuElement::TYPE_PRODUCT:
+                $elementPresented = array_merge($elementPresented, $this->assignProductData($relatedMenuElement));
                 break;
         }
 
@@ -110,7 +123,32 @@ class MenuElementPresenter implements PresenterInterface
         ];
     }
 
-    private function assignDefaultData(MenuElement $menuElement)
+    private function assignCmsData(MenuElementCms $menuElementCms): array
+    {
+        $menuElementCmsLang = $menuElementCms->getMenuElementCmsLangsByLangId($this->context->language->id);
+
+        return [
+            'url' => $this->context->link->getCMsLink($menuElementCms->getIdCMS()),
+            'title' => $menuElementCmsLang->getName(),
+        ];
+    }
+
+    private function assignProductData(MenuElementProduct $menuElementProduct): array
+    {
+        $idProduct = $menuElementProduct->getIdProduct();
+        $idProductAttribute = $menuElementProduct->getIdProductAttribute();
+
+        $productPresented = $this->productFrontPresenter->present([
+            'id_product' => $idProduct,
+            'id_product_attribute' => $idProductAttribute,
+        ]);
+
+        return [
+            'product' => $productPresented,
+        ];
+    }
+
+    private function assignDefaultData(MenuElement $menuElement): array
     {
         return [
             'id' => $menuElement->getId(),

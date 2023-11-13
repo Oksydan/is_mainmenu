@@ -1,14 +1,15 @@
-$(document).ready(function () {
-    window.prestashop.component.initComponents(
-        [
-            'TranslatableField',
-            'TinyMCEEditor',
-            'TranslatableInput',
-        ],
-    );
+(()=>{(()=>{"use strict";var N={};(()=>{var O=Object.defineProperty,b=Object.getOwnPropertySymbols,R=Object.prototype.hasOwnProperty,q=Object.prototype.propertyIsEnumerable,P=(e,o,t)=>o in e?O(e,o,{enumerable:!0,configurable:!0,writable:!0,value:t}):e[o]=t,A=(e,o)=>{for(var t in o||(o={}))R.call(o,t)&&P(e,t,o[t]);if(b)for(var t of b(o))q.call(o,t)&&P(e,t,o[t]);return e},j=(e,o,t)=>new Promise((p,u)=>{var m=n=>{try{r(t.next(n))}catch(s){u(s)}},a=n=>{try{r(t.throw(n))}catch(s){u(s)}},r=n=>n.done?p(n.value):Promise.resolve(n.value).then(m,a);r((t=t.apply(e,o)).next())});const I=e=>new DOMParser().parseFromString(e,"text/html").body.children[0],U=(e,o,t,p,u,m={})=>{let a;const r=A({timeout:300,minChars:3},m),{timeout:n,minChars:s}=r;let C=!1;const c=(_,h)=>{const v=_.map(d=>{const H=t(d),S=I(H);return S.addEventListener("click",u),S}),w=document.createElement("div");if(w.classList.add("menu-product-autocomplete"),v.forEach(d=>{w.appendChild(d)}),v.length===0){const d=document.createElement("div");d.classList.add("m-3","alert","alert-warning"),d.innerText="No results found for "+h,w.appendChild(d)}return w},i=_=>{const{target:h}=_;h!==e&&y()},l=()=>{document.addEventListener("click",i)},f=()=>{C=!1,document.removeEventListener("click",i)},y=()=>{o.innerHTML="",f()},$=()=>{e.removeEventListener("keyup",L),y()},F=_=>{const{height:h}=e.getBoundingClientRect();_.style.top=h+"px"},L=_=>{a&&clearTimeout(a);const{target:h}=_,{value:v}=h;if(v.length<s){y();return}a=setTimeout(()=>j(void 0,null,function*(){const w=yield p(v),d=c(w,v);F(d),o.replaceChildren(d),C||(C=!0,l())}),n)};return{close:y,destroy:$,init:()=>{e.addEventListener("keyup",L)}}};var T=(e,o,t)=>new Promise((p,u)=>{var m=n=>{try{r(t.next(n))}catch(s){u(s)}},a=n=>{try{r(t.throw(n))}catch(s){u(s)}},r=n=>n.done?p(n.value):Promise.resolve(n.value).then(m,a);r((t=t.apply(e,o)).next())});const k=()=>{const e=document.querySelector("#menu_element_product_product_query"),o=document.querySelector("#menu_element_product_id_product"),t=document.querySelector("#menu_element_product_id_product_attribute"),p=document.querySelector(".js-autocomplete-product-result"),u=document.querySelector(".js-autocomplete-product-selected"),m=c=>`
+      <div
+      class="menu-product-autocomplete__item"
+      data-name="${c.name}"
+      data-id-product="${c.id_product}"
+      data-id-product-attribute="${c.id_product_attribute}"
+      >
+        ${c.image?`<img class="menu-product-autocomplete__image" src="${c.image}" />`:""}
+        <div class="menu-product-autocomplete__name">
+          ${c.name}
+        </div>
+      </div>
+    `,a=c=>T(void 0,null,function*(){const i=e.dataset.autocompleteUrl;return yield fetch(i,{method:"POST",headers:{accept:"application/json","Content-Type":"application/x-www-form-urlencoded; charset=UTF-8","X-Requested-With":"XMLHttpRequest"},body:"q="+encodeURIComponent(c)}).then(l=>l.json())}),r=(c,i)=>T(void 0,null,function*(){const l=e.dataset.selectedProductUrl;return yield fetch(l,{method:"POST",headers:{accept:"application/json","Content-Type":"application/x-www-form-urlencoded; charset=UTF-8","X-Requested-With":"XMLHttpRequest"},body:"id_product="+encodeURIComponent(c)+"&id_product_attribute="+encodeURIComponent(i)}).then(f=>f.json())}),n=c=>T(void 0,null,function*(){const{currentTarget:i}=c,l=i.getAttribute("data-id-product"),f=i.getAttribute("data-id-product-attribute");o.value=l,t.value=f,e.value="";const y=yield r(l,f);u.innerHTML=y.content,s()}),{close:s,init:C}=U(e,p,m,a,n);C()},M=()=>{console.log(window.prestashop),window.prestashop.component.initComponents(["TranslatableField","TinyMCEEditor","TranslatableInput"]),new window.prestashop.component.ChoiceTree(".js-choice-tree-container").enableAutoCheckChildren()};let E=0;const x=20,g=()=>{var e;if(!(E>=x))if(E++,!((e=window==null?void 0:window.prestashop)!=null&&e.component))setTimeout(g,100);else{const o=new Event("PrestashopComponentsReady");document.dispatchEvent(o)}};document.addEventListener("DOMContentLoaded",g),document.addEventListener("PrestashopComponentsReady",()=>{M(),k()})})()})();})();
 
-    const choiceTree = new window.prestashop.component.ChoiceTree('.js-choice-tree-container');
-
-    choiceTree.enableAutoCheckChildren();
-});
-
+//# sourceMappingURL=form.js.map

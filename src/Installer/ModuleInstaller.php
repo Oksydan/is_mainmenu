@@ -122,6 +122,27 @@ class ModuleInstaller
                 `content` TEXT NOT NULL
             ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
 
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'menu_element_cms` (
+                `id_menu_element_cms` int(11) NOT NULL AUTO_INCREMENT,
+                `id_menu_element` int(11) NOT NULL,
+                `id_cms` int(11) NOT NULL,
+                PRIMARY KEY (`id_menu_element_cms`)
+            ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
+
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'menu_element_cms_lang` (
+                `id_menu_element_cms` int(11) NOT NULL,
+                `id_lang` int(11) NOT NULL,
+                `name` varchar(256) NOT NULL
+            ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
+
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'menu_element_product` (
+                `id_menu_element_product` int(11) NOT NULL AUTO_INCREMENT,
+                `id_menu_element` int(11) NOT NULL,
+                `id_product` int(11) NOT NULL,
+                `id_product_attribute` int(11) NOT NULL,
+                PRIMARY KEY (`id_menu_element_product`)
+            ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
+
         foreach ($sql as $query) {
             if (!\Db::getInstance()->execute($query)) {
                 $success = false;
@@ -146,6 +167,8 @@ class ModuleInstaller
             'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'menu_element_banner_lang`',
             'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'menu_element_html`',
             'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'menu_element_html_lang`',
+            'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'menu_element_cms`',
+            'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'menu_element_cms_lang`',
         ];
 
         foreach ($sql as $query) {
