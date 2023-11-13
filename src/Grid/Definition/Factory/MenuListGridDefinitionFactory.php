@@ -15,20 +15,25 @@ use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\DataColumn;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\PositionColumn;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\ToggleColumn;
 use PrestaShop\PrestaShop\Core\Grid\Definition\Factory\AbstractGridDefinitionFactory;
+use Oksydan\IsMainMenu\Grid\Action\Row\MenuViewAccessibilityChecker;
 use PrestaShop\PrestaShop\Core\Grid\Filter\FilterCollection;
 use PrestaShop\PrestaShop\Core\Hook\HookDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MenuListGridDefinitionFactory extends AbstractGridDefinitionFactory
 {
-    public TranslatorInterface $trans;
+    private TranslatorInterface $trans;
+
+    private MenuViewAccessibilityChecker $menuViewAccessibilityChecker;
 
     public function __construct(
         HookDispatcherInterface $hookDispatcher = null,
-        TranslatorInterface $trans
+        TranslatorInterface $trans,
+        MenuViewAccessibilityChecker $menuViewAccessibilityChecker
     ) {
         parent::__construct($hookDispatcher);
         $this->trans = $trans;
+        $this->menuViewAccessibilityChecker = $menuViewAccessibilityChecker;
     }
 
     public const GRID_ID = 'is_mainmenu_list';
@@ -104,6 +109,7 @@ class MenuListGridDefinitionFactory extends AbstractGridDefinitionFactory
                                 (new LinkRowAction('view'))
                                     ->setIcon('zoom_in')
                                     ->setOptions([
+                                        'accessibility_checker' => $this->menuViewAccessibilityChecker,
                                         'route' => 'is_mainmenu_controller_list',
                                         'route_param_name' => 'menuItemId',
                                         'route_param_field' => 'id_menu_element',

@@ -219,11 +219,15 @@ class AdminMenuController extends FrameworkBundleAdminController
         $menuElement = $repository->find($menuElementId);
 
         if ($menuElement instanceof MenuElement) {
-            if (in_array($menuElement->getType(), [MenuElement::TYPE_BANNER, MenuELement::TYPE_HTML])) {
+            if (in_array($menuElement->getType(), [
+                MenuElement::TYPE_BANNER,
+                MenuELement::TYPE_HTML,
+                MenuElement::TYPE_PRODUCT
+            ])) {
                 $this->addFlash(
                     'error',
                     $this->trans(
-                        'You can\'t add children to element with type of banner or html content',
+                        'You can\'t add children to element with type of banner, product or html content',
                         TranslationDomains::TRANSLATION_DOMAIN_ADMIN
                     )
                 );
