@@ -3,7 +3,6 @@ import eventPrestashopComponentsReady from './utils/eventPrestashopComponentsRea
 
 const { onComponentsReady } = eventPrestashopComponentsReady();
 
-
 const initAutoComplete = () => {
   const input = document.querySelector('#menu_element_product_product_query');
   const idProductInput = document.querySelector('#menu_element_product_id_product');

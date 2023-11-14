@@ -21,11 +21,11 @@ const eventPrestashopComponentsReady = () => {
 
   const onComponentsReady = (callback) => {
     document.addEventListener('PrestashopComponentsReady', callback);
-  }
+  };
 
   return {
-    onComponentsReady
-  }
-}
+    onComponentsReady,
+  };
+};
 
 export default eventPrestashopComponentsReady;

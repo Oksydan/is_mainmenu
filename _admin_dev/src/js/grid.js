@@ -2,7 +2,6 @@ import eventPrestashopComponentsReady from './utils/eventPrestashopComponentsRea
 
 const { onComponentsReady } = eventPrestashopComponentsReady();
 
-
 onComponentsReady(() => {
   window.prestashop.component.initComponents(
     [
