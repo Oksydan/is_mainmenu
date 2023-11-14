@@ -9,7 +9,7 @@ use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Translations\TranslationDomains;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ToggleMenuElementStatusHandler
+class ToggleMenuElementStatusHandler implements MenuElementHandlerInterface
 {
     private EntityManagerInterface $entityManager;
 
