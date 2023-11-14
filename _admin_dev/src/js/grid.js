@@ -1,4 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+import eventPrestashopComponentsReady from './utils/eventPrestashopComponentsReady';
+
+const { onComponentsReady } = eventPrestashopComponentsReady();
+
+
+onComponentsReady(() => {
   window.prestashop.component.initComponents(
     [
       'Grid',
@@ -9,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   menuGrid.addExtension(new window.prestashop.component.GridExtensions.AsyncToggleColumnExtension());
   menuGrid.addExtension(new window.prestashop.component.GridExtensions.SortingExtension());
-  menuGrid.addExtension(new window.prestashop.component.GridExtensions.PositionExtension());
+  menuGrid.addExtension(new window.prestashop.component.GridExtensions.PositionExtension(menuGrid));
+  menuGrid.addExtension(new window.prestashop.component.GridExtensions.LinkRowActionExtension());
   menuGrid.addExtension(new window.prestashop.component.GridExtensions.SubmitRowActionExtension());
 });

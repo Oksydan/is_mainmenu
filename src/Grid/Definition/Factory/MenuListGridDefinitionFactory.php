@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Oksydan\IsMainMenu\Grid\Definition\Factory;
 
+use Oksydan\IsMainMenu\Grid\Action\Row\MenuGenerateCategoryTreeAccessibilityChecker;
+use Oksydan\IsMainMenu\Grid\Action\Row\MenuViewAccessibilityChecker;
 use Oksydan\IsMainMenu\Translations\TranslationDomains;
 use PrestaShop\PrestaShop\Core\Grid\Action\Bulk\BulkActionCollection;
 use PrestaShop\PrestaShop\Core\Grid\Action\GridActionCollection;
@@ -15,25 +17,37 @@ use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\DataColumn;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\PositionColumn;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\ToggleColumn;
 use PrestaShop\PrestaShop\Core\Grid\Definition\Factory\AbstractGridDefinitionFactory;
-use Oksydan\IsMainMenu\Grid\Action\Row\MenuViewAccessibilityChecker;
 use PrestaShop\PrestaShop\Core\Grid\Filter\FilterCollection;
 use PrestaShop\PrestaShop\Core\Hook\HookDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MenuListGridDefinitionFactory extends AbstractGridDefinitionFactory
 {
+    /**
+     * @var TranslatorInterface
+     */
     private TranslatorInterface $trans;
 
+    /**
+     * @var MenuViewAccessibilityChecker
+     */
     private MenuViewAccessibilityChecker $menuViewAccessibilityChecker;
+
+    /**
+     * @var MenuGenerateCategoryTreeAccessibilityChecker
+     */
+    private MenuGenerateCategoryTreeAccessibilityChecker $menuGenerateCategoryTreeAccessibilityChecker;
 
     public function __construct(
         HookDispatcherInterface $hookDispatcher = null,
         TranslatorInterface $trans,
-        MenuViewAccessibilityChecker $menuViewAccessibilityChecker
+        MenuViewAccessibilityChecker $menuViewAccessibilityChecker,
+        MenuGenerateCategoryTreeAccessibilityChecker $menuGenerateCategoryTreeAccessibilityChecker
     ) {
         parent::__construct($hookDispatcher);
         $this->trans = $trans;
         $this->menuViewAccessibilityChecker = $menuViewAccessibilityChecker;
+        $this->menuGenerateCategoryTreeAccessibilityChecker = $menuGenerateCategoryTreeAccessibilityChecker;
     }
 
     public const GRID_ID = 'is_mainmenu_list';
@@ -123,6 +137,22 @@ class MenuListGridDefinitionFactory extends AbstractGridDefinitionFactory
                                         'route' => 'is_mainmenu_controller_edit',
                                         'route_param_name' => 'menuItemId',
                                         'route_param_field' => 'id_menu_element',
+                                    ])
+                            )
+                            ->add(
+                                (new LinkRowAction('generate_tree'))
+                                    ->setName($this->trans->trans('Generate category tree', [], TranslationDomains::TRANSLATION_DOMAIN_ADMIN))
+                                    ->setIcon('playlist_add')
+                                    ->setOptions([
+                                        'accessibility_checker' => $this->menuGenerateCategoryTreeAccessibilityChecker,
+                                        'route' => 'is_mainmenu_controller_generate_category_tree',
+                                        'route_param_name' => 'menuItemId',
+                                        'route_param_field' => 'id_menu_element',
+                                        'confirm_message' => $this->trans->trans(
+                                            'Are you sure you want to generate category tree for this menu item? This action will remove all existing menu items for this element.',
+                                            [],
+                                            TranslationDomains::TRANSLATION_DOMAIN_ADMIN
+                                        ),
                                     ])
                             )
                             ->add(

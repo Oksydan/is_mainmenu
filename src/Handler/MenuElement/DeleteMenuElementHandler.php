@@ -14,7 +14,7 @@ use Oksydan\IsMainMenu\Repository\MenuElementCustomRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementHtmlRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 
-class DeleteMenuElementHandler
+class DeleteMenuElementHandler implements MenuElementHandlerInterface
 {
     /**
      * @var EntityManagerInterface

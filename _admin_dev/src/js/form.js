@@ -1,4 +1,8 @@
 import useAutocomplete from './components/useAutocomplete';
+import eventPrestashopComponentsReady from './utils/eventPrestashopComponentsReady';
+
+const { onComponentsReady } = eventPrestashopComponentsReady();
+
 
 const initAutoComplete = () => {
   const input = document.querySelector('#menu_element_product_product_query');
@@ -6,6 +10,10 @@ const initAutoComplete = () => {
   const idProductAttributeInput = document.querySelector('#menu_element_product_id_product_attribute');
   const appendToElement = document.querySelector('.js-autocomplete-product-result');
   const selectedElement = document.querySelector('.js-autocomplete-product-selected');
+
+  if (!input || !appendToElement || !selectedElement) {
+    return;
+  }
 
   const formatResult = (item) => `
       <div
@@ -93,26 +101,7 @@ const initFormComponents = () => {
   choiceTree.enableAutoCheckChildren();
 };
 
-let callNumber = 0;
-const callLimit = 20;
-const checkComponentsReady = () => {
-  if (callNumber >= callLimit) {
-    return;
-  }
-
-  callNumber += 1;
-
-  if (!(window?.prestashop?.component)) {
-    setTimeout(checkComponentsReady, 100);
-  } else {
-    const event = new Event('PrestashopComponentsReady');
-    document.dispatchEvent(event);
-  }
-};
-
-document.addEventListener('DOMContentLoaded', checkComponentsReady);
-
-document.addEventListener('PrestashopComponentsReady', () => {
+onComponentsReady(() => {
   initFormComponents();
   initAutoComplete();
 });

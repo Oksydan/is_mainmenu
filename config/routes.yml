@@ -40,6 +40,12 @@ is_mainmenu_controller_update_position:
     defaults:
         _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuController::updatePositionAction'
 
+is_mainmenu_controller_generate_category_tree:
+  path: /is_mainmenu/menu_element/{menuItemId}/generate_category_tree
+  methods: [GET, POST]
+  defaults:
+    _controller: 'Oksydan\IsMainMenu\Controller\AdminMenuController::generateCategoryTreeAction'
+
 is_mainmenu_api_controller_product_autocomplete:
     path: /is_mainmenu/api/autocomplete
     methods: [POST]

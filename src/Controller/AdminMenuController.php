@@ -10,6 +10,7 @@ use Oksydan\IsMainMenu\Form\DataHandler\MenuElementFormDataHandler;
 use Oksydan\IsMainMenu\Form\Provider\MenuElementFormDataProvider;
 use Oksydan\IsMainMenu\Form\Type\MenuElementType;
 use Oksydan\IsMainMenu\Handler\MenuElement\DeleteMenuElementHandler;
+use Oksydan\IsMainMenu\Handler\MenuElement\GenerateMenuCategoryTreeHandler;
 use Oksydan\IsMainMenu\Handler\MenuElement\ToggleMenuElementStatusHandler;
 use Oksydan\IsMainMenu\Handler\MenuElement\UpdateMenuElementPositionHandler;
 use Oksydan\IsMainMenu\Provider\MenuListBreadcrumbDataProvider;
@@ -222,7 +223,7 @@ class AdminMenuController extends FrameworkBundleAdminController
             if (in_array($menuElement->getType(), [
                 MenuElement::TYPE_BANNER,
                 MenuELement::TYPE_HTML,
-                MenuElement::TYPE_PRODUCT
+                MenuElement::TYPE_PRODUCT,
             ])) {
                 $this->addFlash(
                     'error',
@@ -320,6 +321,44 @@ class AdminMenuController extends FrameworkBundleAdminController
         return $this->redirectToRoute('is_mainmenu_controller_index');
     }
 
+    /**
+     * @param Request $request
+     * @param int $menuItemId
+     *
+     * @return Response
+     */
+    public function generateCategoryTreeAction(Request $request, int $menuItemId): Response
+    {
+        $repository = $this->get(MenuElementRepository::class);
+        $menuElement = $repository->find($menuItemId);
+        $parentElement = $menuElement->getParentMenuElement();
+
+        if ($menuElement instanceof MenuElement) {
+            try {
+                $handler = $this->get(GenerateMenuCategoryTreeHandler::class);
+                $handler->handle($menuItemId);
+                $parentId = $parentElement->getId();
+
+                $this->addFlash(
+                    'success',
+                    $this->trans('Successful generated category tree.', TranslationDomains::TRANSLATION_DOMAIN_ADMIN)
+                );
+
+                return $this->redirectToMenuList($parentId);
+            } catch (\Exception $e) {
+                $errors = [$e->getMessage()];
+                $this->flashErrors($errors);
+            }
+        }
+
+        $this->addFlash('error', $this->trans('Menu element don\'t exists', TranslationDomains::TRANSLATION_DOMAIN_ADMIN));
+
+        return $this->redirectToRoute('is_mainmenu_controller_index');
+    }
+
+    /**
+     * @return bool
+     */
     private function installRootElementIfNotExists(): bool
     {
         if (!($this->getRootElement() instanceof MenuElement)) {
