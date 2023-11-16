@@ -1,0 +1,65 @@
+
+.mobile-menu {
+  $self: &;
+
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+
+  &__track {
+    position: relative;
+    height: 100%;
+    transition: 0.4s ease;
+  }
+
+  &__list-wrapper {
+    position: absolute;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: $white;
+    transition: 0.4s ease;
+    opacity: 0;
+    visibility: hidden;
+    min-height: 100%;
+    z-index: 2;
+
+    &.active {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &__loader {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    background: rgba($white, 0.3);
+    display: none;
+  }
+
+  &.loading {
+    #{$self} {
+      &__loader {
+        //display: flex;
+      }
+    }
+  }
+
+  &__elem {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid $border-color;
+  }
+
+  &__link {
+    flex: 1 1;
+    padding: rem-calc(10px) rem-calc(10px) rem-calc(10px) 0;
+  }
+
+  &__depth-btn {
+    flex: 0 0;
+  }
+}

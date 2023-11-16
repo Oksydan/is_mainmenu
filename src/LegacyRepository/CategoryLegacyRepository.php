@@ -70,7 +70,7 @@ class CategoryLegacyRepository
     {
         $qb = $this->connection->createQueryBuilder()
             ->select('cs.id_shop')
-            ->from($this->dbPrefix . 'shop', 'cs')
+            ->from($this->dbPrefix . 'category_shop', 'cs')
             ->andWhere('cs.id_category = :id_category')
             ->setParameter('id_category', $idCategory);
 

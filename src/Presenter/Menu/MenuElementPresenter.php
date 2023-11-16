@@ -11,7 +11,10 @@ use Oksydan\IsMainMenu\Entity\MenuElementCustom;
 use Oksydan\IsMainMenu\Entity\MenuElementHtml;
 use Oksydan\IsMainMenu\Entity\MenuElementProduct;
 use Oksydan\IsMainMenu\Entity\MenuElementRelatedEntityInterface;
+use Oksydan\IsMainMenu\Menu\MenuElementRelatedElementProvider;
+use Oksydan\IsMainMenu\Menu\MenuElementVisibilityManager;
 use Oksydan\IsMainMenu\Presenter\Product\ProductFrontPresenter;
+use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 
 class MenuElementPresenter implements MenuElementPresenterInterface
 {
@@ -25,16 +28,40 @@ class MenuElementPresenter implements MenuElementPresenterInterface
      */
     private \Is_mainmenu $module;
 
+    /*
+     * @var MenuElementRepository
+     */
+    private MenuElementRepository $menuElementRepository;
+
+    /*
+     * @var ProductFrontPresenter
+     */
     private ProductFrontPresenter $productFrontPresenter;
+
+    /**
+     * @var MenuElementVisibilityManager
+     */
+    private MenuElementVisibilityManager $menuElementVisibilityManager;
+
+    /*
+     * @var MenuElementRelatedElementProvider
+     */
+    private MenuElementRelatedElementProvider $menuElementRelatedElementProvider;
 
     public function __construct(
         \Context $context,
         \Is_mainmenu $module,
-        ProductFrontPresenter $productFrontPresenter
+        MenuElementRepository $menuElementRepository,
+        ProductFrontPresenter $productFrontPresenter,
+        MenuElementVisibilityManager $menuElementVisibilityManager,
+        MenuElementRelatedElementProvider $menuElementRelatedElementProvider
     ) {
         $this->context = $context;
         $this->module = $module;
+        $this->menuElementRepository = $menuElementRepository;
         $this->productFrontPresenter = $productFrontPresenter;
+        $this->menuElementVisibilityManager = $menuElementVisibilityManager;
+        $this->menuElementRelatedElementProvider = $menuElementRelatedElementProvider;
     }
 
     public function present(MenuElement $menuElement, MenuElementRelatedEntityInterface $relatedMenuElement): array
@@ -148,6 +175,22 @@ class MenuElementPresenter implements MenuElementPresenterInterface
         ];
     }
 
+    private function hasChildren(MenuElement $menuElement): bool
+    {
+        $children = $this->menuElementRepository->getActiveMenuElementChildrenByStoreId($menuElement, $this->context->shop->id);
+        $children = array_filter($children, function (MenuElement $menuElement) {
+            $relatedElement = $this->menuElementRelatedElementProvider->getRelatedMenuElementByMenuElement($menuElement);
+
+            if (!$relatedElement) {
+                return false;
+            }
+
+            return $this->menuElementVisibilityManager->shouldBeElementDisplayed($relatedElement);
+        });
+
+        return !empty($children);
+    }
+
     private function assignDefaultData(MenuElement $menuElement): array
     {
         return [
@@ -155,6 +198,7 @@ class MenuElementPresenter implements MenuElementPresenterInterface
             'type' => $menuElement->getType(),
             'css_class' => $menuElement->getCssClass(),
             'depth' => $menuElement->getDepth(),
+            'has_children' => $this->hasChildren($menuElement),
         ];
     }
 }

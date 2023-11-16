@@ -9,6 +9,7 @@ class ModuleInstaller
     const HOOKS_LIST = [
         'displayTop',
         'displayMobileMenu',
+        'actionFrontControllerSetMedia',
     ];
 
     private \Module $module;
