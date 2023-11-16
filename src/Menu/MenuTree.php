@@ -5,7 +5,6 @@ namespace Oksydan\IsMainMenu\Menu;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Presenter\Menu\MenuElementPresenter;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
-use Oksydan\IsMainMenu\Menu\MenuElementVisibilityManager;
 
 class MenuTree
 {

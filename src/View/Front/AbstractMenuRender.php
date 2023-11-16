@@ -13,8 +13,7 @@ abstract class AbstractMenuRender implements MenuFrontRenderInterface
     public function __construct(
         \Is_mainmenu $module,
         \Context $context
-    )
-    {
+    ) {
         $this->module = $module;
         $this->context = $context;
     }

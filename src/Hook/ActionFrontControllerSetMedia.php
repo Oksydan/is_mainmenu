@@ -20,7 +20,6 @@ class ActionFrontControllerSetMedia extends AbstractHook
         $this->templateCache = $templateCache;
     }
 
-
     public function execute(array $params): void
     {
         \Media::addJsDef([

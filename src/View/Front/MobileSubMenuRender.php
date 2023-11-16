@@ -23,8 +23,7 @@ class MobileSubMenuRender extends AbstractMenuRender implements MenuFrontRenderI
         MenuElementRepository $menuElementRepository,
         MenuElementRelatedElementProvider $menuElementRelatedElementProvider,
         MenuElementPresenter $menuElementPresenter
-    )
-    {
+    ) {
         parent::__construct($module, $context);
         $this->menuTree = $menuTree;
         $this->menuElementRepository = $menuElementRepository;

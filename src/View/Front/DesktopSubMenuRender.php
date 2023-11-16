@@ -14,8 +14,7 @@ class DesktopSubMenuRender extends AbstractMenuRender implements MenuFrontRender
         \Is_mainmenu $module,
         \Context $context,
         MenuTree $menuTree
-    )
-    {
+    ) {
         parent::__construct($module, $context);
         $this->menuTree = $menuTree;
     }

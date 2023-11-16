@@ -50,8 +50,7 @@ class MenuElementRelatedElementProvider
         MenuElementCustomRepository $menuElementCustomRepository,
         MenuElementCmsRepository $menuElementCmsRepository,
         MenuElementProductRepository $menuElementProductRepository
-    )
-    {
+    ) {
         $this->menuElementHtmlRepository = $menuElementHtmlRepository;
         $this->menuElementBannerRepository = $menuElementBannerRepository;
         $this->menuElementCategoryRepository = $menuElementCategoryRepository;
