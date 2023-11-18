@@ -28,6 +28,7 @@ class DesktopSubMenuRender extends AbstractMenuRender implements MenuFrontRender
     {
         $this->context->smarty->assign([
             'menu_tree' => $this->menuTree->getMenuTree($idMenuElement, MenuTree::MENU_TYPE_DESKTOP),
+            'configuration' => $this->context->controller->getTemplateVarConfiguration(),
         ]);
     }
 }

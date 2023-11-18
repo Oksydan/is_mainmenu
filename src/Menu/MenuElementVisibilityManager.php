@@ -50,36 +50,31 @@ class MenuElementVisibilityManager
         ?MenuElementRelatedEntityInterface $menuElementRelated,
         string $menuType
     ): bool {
-        $displayed = true;
-
         if ($menuType === MenuTree::MENU_TYPE_DESKTOP && !$menuElement->getDisplayDesktop()) {
-            $displayed = false;
+            return false;
         } elseif ($menuType === MenuTree::MENU_TYPE_MOBILE && !$menuElement->getDisplayMobile()) {
-            $displayed = false;
+            return false;
         }
 
         switch (get_class($menuElementRelated)) {
             case MenuElementCategory::class:
-                $displayed = $displayed && $this->categoryLegacyRepository->isCategoryActiveAndVisible(
+                return $this->categoryLegacyRepository->isCategoryActiveAndVisible(
                     $menuElementRelated->getIdCategory(),
                     $this->context->shop->id,
                     $this->context->customer->id_default_group
                 );
-                break;
             case MenuElementCms::class:
-                $displayed = $displayed && $this->cmsLegacyRepository->isCmsPageAciveForStore(
+                return $this->cmsLegacyRepository->isCmsPageAciveForStore(
                     $menuElementRelated->getIdCms(),
                     $this->context->shop->id
                 );
-                break;
             case MenuElementProduct::class:
-                $displayed = $displayed && $this->productLegacyRepository->isProductActiveForStoreAndVisible(
+                return $this->productLegacyRepository->isProductActiveForStoreAndVisible(
                     $menuElementRelated->getIdProduct(),
                     $this->context->shop->id
                 );
-                break;
         }
 
-        return $displayed;
+        return true;
     }
 }

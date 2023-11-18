@@ -45,6 +45,7 @@ class MobileSubMenuRender extends AbstractMenuRender implements MenuFrontRenderI
             'menu' => $this->menuTree->getMenuTree($idMenuElement, MenuTree::MENU_TYPE_MOBILE, 1),
             'depth' => $parentElement->getDepth() + 1,
             'parent' => $parentPresented,
+            'configuration' => $this->context->controller->getTemplateVarConfiguration(),
         ]);
     }
 
@@ -52,6 +53,6 @@ class MobileSubMenuRender extends AbstractMenuRender implements MenuFrontRenderI
     {
         $relatedElement = $this->menuElementRelatedElementProvider->getRelatedMenuElementByMenuElement($menuElement);
 
-        return $this->menuElementPresenter->present($menuElement, $relatedElement);
+        return $this->menuElementPresenter->present($menuElement, $relatedElement, MenuTree::MENU_TYPE_MOBILE);
     }
 }

@@ -24,7 +24,7 @@
   {/if}
 {/function}
 
-{function renderMenuLinks menuElement=[]}
+{function renderSubmenuLinks menuElement=[]}
   <a href="{$child.url}"
      title="{$child.title}"
      data-depth="{$depth}"
@@ -44,18 +44,31 @@
   {/if}
 {/function}
 
+{function renderSubmenuProduct menuElement=[]}
+  {if !empty($menuElement.product)}
+    {include
+      file='module:is_mainmenu/views/templates/front/_partials/mobile-product.tpl'
+      product=$menuElement.product
+    }
+  {/if}
+{/function}
+
 {function renderMenuElement menuElement=[]}
   {if in_array($menuElement.type, ['category', 'custom', 'cms'])}
     <div class="mobile-menu__elem">
-      {renderMenuLinks menuElement=$menuElement}
+      {renderSubmenuLinks menuElement=$menuElement}
     </div>
   {elseif $menuElement.type == 'banner'}
-    <div class="mobile-menu__elem p-3">
+    <div class="mobile-menu__elem py-3">
       {renderSubmenuBanner menuElement=$menuElement}
     </div>
   {elseif $menuElement.type == 'html'}
-    <div class="mobile-menu__elem p-3">
+    <div class="mobile-menu__elem py-3">
       {renderSubmenuHtml menuElement=$menuElement}
+    </div>
+  {elseif $menuElement.type == 'product'}
+    <div class="mobile-menu__elem py-3">
+      {renderSubmenuProduct menuElement=$menuElement}
     </div>
   {/if}
 {/function}
