@@ -9,7 +9,7 @@
             <img
               {if $product.default_image}
                 data-full-size-image-url="{$product.default_image.large.url}"
-                  {generateImagesSources image=$product.default_image size='cart_default'}
+                {generateImagesSources image=$product.default_image size='cart_default'}
                 alt="{if !empty($product.default_image.legend)}{$product.default_image.legend}{else}{$product.name|truncate:30:'...'}{/if}"
                 width="{$product.default_image.bySize.cart_default.width}"
                 height="{$product.default_image.bySize.cart_default.height}"
@@ -35,14 +35,22 @@
       {if $product.show_price}
         {if $product.has_discount}
           {hook h='displayProductPriceBlock' product=$product type="old_price"}
-          <span class="price price--sm price--regular me-1" aria-label="{l s='Regular price' d='Shop.Theme.Catalog'}">
+          <span
+            class="price price--sm price--regular me-1"
+            aria-label="{l s='Regular price' d='Shop.Theme.Catalog'}"
+          >
             {$product.regular_price}
           </span>
         {/if}
 
         {hook h='displayProductPriceBlock' product=$product type="before_price"}
 
-        <span class="price price--sm" aria-label="{l s='Price' d='Shop.Theme.Catalog'}">{$product.price}</span>
+        <span
+          class="price price--sm"
+          aria-label="{l s='Price' d='Shop.Theme.Catalog'}"
+        >
+          {$product.price}
+        </span>
 
         {hook h='displayProductPriceBlock' product=$product type='unit_price'}
 
