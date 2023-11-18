@@ -8,6 +8,9 @@ use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 
 class MenuTree
 {
+    public const MENU_TYPE_MOBILE = 'mobile';
+    public const MENU_TYPE_DESKTOP = 'desktop';
+
     /**
      * @var MenuElementRepository
      */
@@ -47,7 +50,7 @@ class MenuTree
         $this->context = $context;
     }
 
-    public function getMenuTree($idElement = null, $maxDepth = null): array
+    public function getMenuTree(int $idElement = null, string $menuType = self::MENU_TYPE_DESKTOP, int $maxDepth = null): array
     {
         if ($idElement) {
             $root = $this->menuElementRepository->getMenuElementById($idElement);
@@ -55,10 +58,10 @@ class MenuTree
             $root = $this->menuElementRepository->getRootElement();
         }
 
-        return $this->buildMenuTreeRecursively($root, 0, $maxDepth);
+        return $this->buildMenuTreeRecursively($root, $menuType, 0, $maxDepth);
     }
 
-    private function buildMenuTreeRecursively(MenuElement $menuElement, $currentDepth, $maxDepth): array
+    private function buildMenuTreeRecursively(MenuElement $menuElement, string $menuType, int $currentDepth, ?int $maxDepth): array
     {
         $children = $this->getElementChildren($menuElement);
         $tree = [];
@@ -71,10 +74,10 @@ class MenuTree
         foreach ($children as $child) {
             $relatedMenuElement = $this->menuElementRelatedElementProvider->getRelatedMenuElementByMenuElement($child);
 
-            if ($relatedMenuElement && $this->menuElementVisibilityManager->shouldBeElementDisplayed($relatedMenuElement)) {
+            if ($relatedMenuElement && $this->menuElementVisibilityManager->shouldBeElementDisplayed($child, $relatedMenuElement, $menuType)) {
                 $tree[] = [
-                    ...$this->menuElementPresenter->present($child, $relatedMenuElement),
-                    'children' => $this->buildMenuTreeRecursively($child, $currentDepth, $maxDepth),
+                    ...$this->menuElementPresenter->present($child, $relatedMenuElement, $menuType),
+                    'children' => $this->buildMenuTreeRecursively($child, $menuType, $currentDepth, $maxDepth),
                 ];
             }
         }

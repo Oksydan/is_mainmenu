@@ -10,7 +10,7 @@ use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 
 class MobileSubMenuRender extends AbstractMenuRender implements MenuFrontRenderInterface
 {
-    protected string $templateFile = 'mobileSubmenu.tpl';
+    protected string $templateFile = 'mobile-submenu.tpl';
 
     private MenuTree $menuTree;
 
@@ -42,7 +42,7 @@ class MobileSubMenuRender extends AbstractMenuRender implements MenuFrontRenderI
         $parentPresented = $this->presentParentElement($parentElement);
 
         $this->context->smarty->assign([
-            'menu' => $this->menuTree->getMenuTree($idMenuElement),
+            'menu' => $this->menuTree->getMenuTree($idMenuElement, MenuTree::MENU_TYPE_MOBILE, 1),
             'depth' => $parentElement->getDepth() + 1,
             'parent' => $parentPresented,
         ]);

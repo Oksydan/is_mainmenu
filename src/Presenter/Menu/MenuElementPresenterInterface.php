@@ -7,5 +7,9 @@ use Oksydan\IsMainMenu\Entity\MenuElementRelatedEntityInterface;
 
 interface MenuElementPresenterInterface
 {
-    public function present(MenuElement $menuElement, MenuElementRelatedEntityInterface $relatedMenuElement): array;
+    public function present(
+        MenuElement $menuElement,
+        MenuElementRelatedEntityInterface $relatedMenuElement,
+        string $menuType
+    ): array;
 }

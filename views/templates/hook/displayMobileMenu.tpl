@@ -1,11 +1,7 @@
+{extends file='components/offcanvas.tpl'}
 
-<div class="mobile-menu js-mobile-menu">
-    <div class="js-mobile-menu-track mobile-menu__track">
-        {include file="module:is_mainmenu/views/templates/front/mobileSubmenu.tpl" menu_tree=$menu}
-    </div>
-
-  <div class="mobile-menu__loader">
-    <div class="mobile-menu__loader-spinner spinner-border text-primary" role="status">
-    </div>
-  </div>
-</div>
+{block name='offcanvas_extra_attribues'}id="mobile_menu_offcanvas"{/block}
+{block name='offcanvas_title'}{l s='Menu' d='Shop.Theme.Catalog'}{/block}
+{block name='offcanvas_body'}
+  {include file='module:is_mainmenu/views/templates/front/mobile-menu-content.tpl'}
+{/block}

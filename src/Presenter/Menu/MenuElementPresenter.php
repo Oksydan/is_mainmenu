@@ -64,9 +64,12 @@ class MenuElementPresenter implements MenuElementPresenterInterface
         $this->menuElementRelatedElementProvider = $menuElementRelatedElementProvider;
     }
 
-    public function present(MenuElement $menuElement, MenuElementRelatedEntityInterface $relatedMenuElement): array
-    {
-        $elementPresented = $this->assignDefaultData($menuElement);
+    public function present(
+        MenuElement $menuElement,
+        MenuElementRelatedEntityInterface $relatedMenuElement,
+        string $menuType
+    ): array {
+        $elementPresented = $this->assignDefaultData($menuElement, $menuType);
 
         switch ($menuElement->getType()) {
             case MenuElement::TYPE_CATEGORY:
@@ -175,30 +178,30 @@ class MenuElementPresenter implements MenuElementPresenterInterface
         ];
     }
 
-    private function hasChildren(MenuElement $menuElement): bool
+    private function hasChildren(MenuElement $menuElement, string $menuType): bool
     {
         $children = $this->menuElementRepository->getActiveMenuElementChildrenByStoreId($menuElement, $this->context->shop->id);
-        $children = array_filter($children, function (MenuElement $menuElement) {
+        $children = array_filter($children, function (MenuElement $menuElement) use ($menuType) {
             $relatedElement = $this->menuElementRelatedElementProvider->getRelatedMenuElementByMenuElement($menuElement);
 
             if (!$relatedElement) {
                 return false;
             }
 
-            return $this->menuElementVisibilityManager->shouldBeElementDisplayed($relatedElement);
+            return $this->menuElementVisibilityManager->shouldBeElementDisplayed($menuElement, $relatedElement, $menuType);
         });
 
         return !empty($children);
     }
 
-    private function assignDefaultData(MenuElement $menuElement): array
+    private function assignDefaultData(MenuElement $menuElement, string $menuType): array
     {
         return [
             'id' => $menuElement->getId(),
             'type' => $menuElement->getType(),
             'css_class' => $menuElement->getCssClass(),
             'depth' => $menuElement->getDepth(),
-            'has_children' => $this->hasChildren($menuElement),
+            'has_children' => $this->hasChildren($menuElement, $menuType),
         ];
     }
 }

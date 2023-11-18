@@ -2,6 +2,7 @@
 
 namespace Oksydan\IsMainMenu\Menu;
 
+use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Entity\MenuElementCategory;
 use Oksydan\IsMainMenu\Entity\MenuElementCms;
 use Oksydan\IsMainMenu\Entity\MenuElementProduct;
@@ -44,27 +45,41 @@ class MenuElementVisibilityManager
         $this->productLegacyRepository = $productLegacyRepository;
     }
 
-    public function shouldBeElementDisplayed(?MenuElementRelatedEntityInterface $menuElement): bool
-    {
-        switch (get_class($menuElement)) {
+    public function shouldBeElementDisplayed(
+        MenuElement $menuElement,
+        ?MenuElementRelatedEntityInterface $menuElementRelated,
+        string $menuType
+    ): bool {
+        $displayed = true;
+
+        if ($menuType === MenuTree::MENU_TYPE_DESKTOP && !$menuElement->getDisplayDesktop()) {
+            $displayed = false;
+        } elseif ($menuType === MenuTree::MENU_TYPE_MOBILE && !$menuElement->getDisplayMobile()) {
+            $displayed = false;
+        }
+
+        switch (get_class($menuElementRelated)) {
             case MenuElementCategory::class:
-                return $this->categoryLegacyRepository->isCategoryActiveAndVisible(
-                    $menuElement->getIdCategory(),
+                $displayed = $displayed && $this->categoryLegacyRepository->isCategoryActiveAndVisible(
+                    $menuElementRelated->getIdCategory(),
                     $this->context->shop->id,
                     $this->context->customer->id_default_group
                 );
+                break;
             case MenuElementCms::class:
-                return $this->cmsLegacyRepository->isCmsPageAciveForStore(
-                    $menuElement->getIdCms(),
+                $displayed = $displayed && $this->cmsLegacyRepository->isCmsPageAciveForStore(
+                    $menuElementRelated->getIdCms(),
                     $this->context->shop->id
                 );
+                break;
             case MenuElementProduct::class:
-                return $this->productLegacyRepository->isProductActiveForStoreAndVisible(
-                    $menuElement->getIdProduct(),
+                $displayed = $displayed && $this->productLegacyRepository->isProductActiveForStoreAndVisible(
+                    $menuElementRelated->getIdProduct(),
                     $this->context->shop->id
                 );
+                break;
         }
 
-        return true;
+        return $displayed;
     }
 }

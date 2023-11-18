@@ -6,7 +6,7 @@ use Oksydan\IsMainMenu\Menu\MenuTree;
 
 class DesktopSubMenuRender extends AbstractMenuRender implements MenuFrontRenderInterface
 {
-    protected string $templateFile = 'desktopSubmenu.tpl';
+    protected string $templateFile = 'desktop-submenu.tpl';
 
     private MenuTree $menuTree;
 
@@ -27,7 +27,7 @@ class DesktopSubMenuRender extends AbstractMenuRender implements MenuFrontRender
     protected function assignTemplateVariables($idMenuElement): void
     {
         $this->context->smarty->assign([
-            'menu_tree' => $this->menuTree->getMenuTree($idMenuElement),
+            'menu_tree' => $this->menuTree->getMenuTree($idMenuElement, MenuTree::MENU_TYPE_DESKTOP),
         ]);
     }
 }
