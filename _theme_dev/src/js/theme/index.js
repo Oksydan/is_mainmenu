@@ -1,11 +1,11 @@
 import { DOMReady } from '@js/utils/DOM/DOMHelpers';
 import useDesktopMenu from './components/useDesktopMenu';
-import useMobileMenu from './components/useMobileMenu';
+import mobileMenuController from './controller/mobileMenuController';
 
 DOMReady(() => {
   const { init: initDesktopMenu } = useDesktopMenu();
-  const { init: initMobileMenu } = useMobileMenu();
+  const { init: initMobileMenuController } = mobileMenuController();
 
-  initMobileMenu();
+  initMobileMenuController();
   initDesktopMenu();
 });
