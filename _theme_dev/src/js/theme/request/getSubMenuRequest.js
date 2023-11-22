@@ -8,7 +8,7 @@ import useHttpRequest from '@js/utils/http/useHttpRequest';
 const getSubMenuRequest = (url, payload) => {
   const { request } = useHttpRequest(url);
 
-  const getRequest = () => new Promise((resolve, reject) => {
+  const getRequest = () => new Promise((resolve) => {
     request
       .query(payload)
       .get()

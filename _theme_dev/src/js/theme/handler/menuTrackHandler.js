@@ -3,15 +3,12 @@
  * @param {HTMLElement} trackElement
  */
 const menuTrackHandler = (trackElement) => {
-
   /**
    * Get calculated depth
    * @param {Number} depth
    * @return {number|*}
    */
-  const getDepthToCalc = (depth) => {
-    return depth > 0 ? depth - 1 : depth;
-  }
+  const getDepthToCalc = (depth) => (depth > 0 ? depth - 1 : depth);
 
   /**
    * Move track to depth
@@ -24,11 +21,11 @@ const menuTrackHandler = (trackElement) => {
     }
 
     trackElement.style.transform = `translateX(-${getDepthToCalc(depth) * 100}%)`;
-  }
+  };
 
   return {
-    moveTrackToDepth
-  }
-}
+    moveTrackToDepth,
+  };
+};
 
 export default menuTrackHandler;

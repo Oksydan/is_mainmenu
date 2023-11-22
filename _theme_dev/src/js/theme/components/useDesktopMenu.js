@@ -1,5 +1,5 @@
-import useHoverIntent from "./useHoverIntent";
-import getSubMenuRequest from "../request/getSubMenuRequest";
+import useHoverIntent from './useHoverIntent';
+import getSubMenuRequest from '../request/getSubMenuRequest';
 
 const useDesktopMenu = (
   mainMenuListSelector = '.js-main-menu-list',
@@ -14,16 +14,17 @@ const useDesktopMenu = (
     } else {
       target?.classList.remove('active-submenu');
     }
-  }
+  };
 
   const fetchSubmenu = async (id) => {
     // getDesktopSubmenuAjaxUrl is a global variable defined in the module ActionFrontControllerSetMedia hook
+    // eslint-disable-next-line no-undef
     const { getRequest } = getSubMenuRequest(getDesktopSubmenuAjaxUrl, {
       id_menu_element: id,
     });
 
-    return await getRequest();
-  }
+    return getRequest();
+  };
 
   const handleMainMenuSubLinkFetch = async (event, target) => {
     const id = target?.getAttribute('data-id');
@@ -44,10 +45,10 @@ const useDesktopMenu = (
     if (submenuContentElement) {
       submenuContentElement.innerHTML = html;
     }
-  }
+  };
 
   const attachEvents = () => {
-    const listElements = document.querySelectorAll(mainMenuListSelector + ' ' + mainMenuItemSelector);
+    const listElements = document.querySelectorAll(`${mainMenuListSelector} ${mainMenuItemSelector}`);
 
     listElements.forEach((listElement) => {
       useHoverIntent(
@@ -58,15 +59,15 @@ const useDesktopMenu = (
         handleMainMenuSubLinkFetch,
       );
     });
-  }
+  };
 
   const init = () => {
     attachEvents();
-  }
+  };
 
   return {
     init,
   };
-}
+};
 
 export default useDesktopMenu;

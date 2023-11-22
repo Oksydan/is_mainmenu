@@ -1,6 +1,6 @@
-import fetchSubmenuHandler from "./fetchSubmenuHandler";
-import mobileMenuHistory from "../components/mobileMenuHistory";
-import menuTrackHandler from "./menuTrackHandler";
+import fetchSubmenuHandler from './fetchSubmenuHandler';
+import mobileMenuHistory from '../components/mobileMenuHistory';
+import menuTrackHandler from './menuTrackHandler';
 
 /**
  * @param mobileMenuTrack
@@ -10,17 +10,17 @@ import menuTrackHandler from "./menuTrackHandler";
  * @param menuListActiveClass
  */
 const moveMenuListHandler = ({
-                               mobileMenuTrack,
-                               menuListElementSelector,
-                               mobileMenuMainWrapper,
-                               nextLevelBtnSelector,
-                               menuListActiveClass,
-                             }) => {
+  mobileMenuTrack,
+  menuListElementSelector,
+  mobileMenuMainWrapper,
+  nextLevelBtnSelector,
+  menuListActiveClass,
+}) => {
   const loadedMenuSet = new Set();
   const {
     add: addToHistory,
     removeLast: removeLastFromHistory,
-    clear: clearHistory
+    clear: clearHistory,
   } = mobileMenuHistory();
   let _trackHandler = null;
 
@@ -34,7 +34,7 @@ const moveMenuListHandler = ({
     }
 
     return _trackHandler;
-  }
+  };
 
   /**
    * Set loading class to main wrapper
@@ -53,7 +53,7 @@ const moveMenuListHandler = ({
     } else {
       mainWrapper.classList.remove('loading');
     }
-  }
+  };
 
   /**
    * Get ids from list
@@ -68,7 +68,7 @@ const moveMenuListHandler = ({
     });
 
     return ids;
-  }
+  };
 
   /**
    * Fetch submenu and render it for given list
@@ -102,16 +102,14 @@ const moveMenuListHandler = ({
     }
 
     setLoading(false);
-  }
+  };
 
   /**
    * Get calculated depth
    * @param {Number} depth
    * @return {number|*}
    */
-  const getDepthToCalc = (depth) => {
-    return depth > 0 ? depth - 1 : depth;
-  }
+  const getDepthToCalc = (depth) => (depth > 0 ? depth - 1 : depth);
 
   /**
    * Go to menu list
@@ -135,7 +133,7 @@ const moveMenuListHandler = ({
     addToHistory(id);
 
     fetchSubMenuAndRender(list);
-  }
+  };
 
   /**
    * Back to previous menu list
@@ -157,7 +155,7 @@ const moveMenuListHandler = ({
     }
 
     list.classList.remove(menuListActiveClass);
-  }
+  };
 
   /**
    * Reset menu to initial state
@@ -174,14 +172,14 @@ const moveMenuListHandler = ({
     moveTrackToDepth(0);
     goToMenuList(0); // 0 is id of main menu
     clearHistory();
-  }
+  };
 
   return {
     goToMenuList,
     back,
     reset,
     fetchSubMenuAndRender,
-  }
-}
+  };
+};
 
 export default moveMenuListHandler;

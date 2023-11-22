@@ -1,8 +1,8 @@
 {
-  "name": "is_favoriteproducts",
-  "label": "Favorite Products",
+  "name": "is_mainmenu",
+  "label": "Main menu module",
   "version": "1.0.0",
-  "description": "Favorite Products",
+  "description": "Main menu module",
   "author": "Igor Stępień",
   "scripts": {
     "scss-lint": "stylelint \"**/*.scss\" --fix",

@@ -1,5 +1,5 @@
-import { on } from '@js/utils/event/EventHandler';
-import moveMenuListHandler from "../handler/moveMenuListHandler";
+import { on } from '@js/utils/event/eventHandler';
+import moveMenuListHandler from '../handler/moveMenuListHandler';
 
 /**
  * Mobile menu controller
@@ -20,7 +20,7 @@ const mobileMenuController = (options = {}) => {
     nextLevelBtnSelector,
     menuListElementSelector,
     menuBackBtnSelector,
-    menuListActiveClass
+    menuListActiveClass,
   } = {
     mobileMenuOffcanvasSelector: '#mobile_menu_offcanvas',
     mobileMenuMainWrapper: '.js-mobile-menu',
@@ -29,14 +29,14 @@ const mobileMenuController = (options = {}) => {
     menuListElementSelector: '.js-mobile-menu-list',
     menuBackBtnSelector: '.js-mobile-menu-back-btn',
     menuListActiveClass: 'active',
-    ...options
-  }
+    ...options,
+  };
 
   let initialized = false;
   const {
     goToMenuList,
     back,
-    reset
+    reset,
   } = moveMenuListHandler({
     mobileMenuTrack,
     menuListElementSelector,
@@ -44,7 +44,6 @@ const mobileMenuController = (options = {}) => {
     nextLevelBtnSelector,
     menuListActiveClass,
   });
-
 
   /**
    * Next level btn click handler
@@ -62,7 +61,7 @@ const mobileMenuController = (options = {}) => {
     }
 
     goToMenuList(id);
-  }
+  };
 
   /**
    * Back btn click handler
@@ -73,7 +72,7 @@ const mobileMenuController = (options = {}) => {
     event.preventDefault();
 
     back();
-  }
+  };
 
   /**
    * Mobile menu open handler
@@ -89,14 +88,14 @@ const mobileMenuController = (options = {}) => {
     const id = parseInt(activeList.getAttribute('data-id'), 10);
 
     goToMenuList(id);
-  }
+  };
 
   /**
    * Mobile menu closed handler
    */
   const mobileMenuClosedHandler = () => {
     reset();
-  }
+  };
 
   /**
    * Attach events to document and mobile menu
@@ -111,18 +110,18 @@ const mobileMenuController = (options = {}) => {
       offcanvas.addEventListener('show.bs.offcanvas', mobileMenuOpenHandler);
       offcanvas.addEventListener('hidden.bs.offcanvas', mobileMenuClosedHandler);
     }
-  }
+  };
 
   /**
    * Init mobile menu controller
    */
   const init = () => {
     attachEvents();
-  }
+  };
 
   return {
-    init
-  }
-}
+    init,
+  };
+};
 
 export default mobileMenuController;

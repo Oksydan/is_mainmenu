@@ -14,13 +14,14 @@ import getSubMenuRequest from '../request/getSubMenuRequest';
  * @param {int[]} ids
  * @return {Promise<ServerResponse>}
  */
-const fetchSubmenuHandler =  async (ids) => {
+const fetchSubmenuHandler = async (ids) => {
   // getMobileSubmenuAjaxUrl is a global variable defined in the module ActionFrontControllerSetMedia hook
+  // eslint-disable-next-line no-undef
   const { getRequest } = getSubMenuRequest(getMobileSubmenuAjaxUrl, {
     'id_menu_elements[]': ids,
   });
 
-  return await getRequest();
-}
+  return getRequest();
+};
 
 export default fetchSubmenuHandler;

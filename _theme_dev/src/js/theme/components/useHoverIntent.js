@@ -17,7 +17,8 @@ const useHoverIntent = (
   onStartOver = () => {},
   onStartOut = () => {},
 ) => {
-  let x, y, pX, pY;
+  let x; let y; let pX; let
+    pY;
   let mouseOver = false;
   let focused = false;
   let state = 0;
@@ -45,17 +46,17 @@ const useHoverIntent = (
   /**
    * Delays the onOut callback and clears the timer.
    *
-   * @param {HTMLElement} el - The element triggering the hover intent.
+   * @param {HTMLElement} element - The element triggering the hover intent.
    * @param {MouseEvent} e - The mouse event object.
    * @returns {undefined} - Returns undefined if focused, otherwise calls onOut callback.
    */
-  function delay(el, e) {
+  function delay(element, e) {
     if (timer) {
       clearTimeout(timer);
     }
 
     state = 0;
-    return focused ? undefined : onOut.call(el, e, el);
+    return focused ? undefined : onOut.call(element, e, element);
   }
 
   /**
@@ -71,25 +72,67 @@ const useHoverIntent = (
   /**
    * Compares the current mouse position with the previous position.
    *
-   * @param {HTMLElement} el - The element triggering the hover intent.
+   * @param {HTMLElement} element - The element triggering the hover intent.
    * @param {MouseEvent} e - The mouse event object.
    * @returns {undefined} - Returns undefined if focused, otherwise calls onOver callback.
    */
-  function compare(el, e) {
+  function compare(element, e) {
     if (timer) {
       clearTimeout(timer);
     }
 
     if (Math.abs(pX - x) + Math.abs(pY - y) < options.sensitivity) {
       state = 1;
-      return focused ? undefined : onOver.call(el, e, el);
-    } else {
-      pX = x;
-      pY = y;
-      timer = setTimeout(() => {
-        compare(el, e);
-      }, options.interval);
+      return focused ? undefined : onOver.call(element, e, element);
     }
+
+    pX = x;
+    pY = y;
+    timer = setTimeout(() => {
+      compare(element, e);
+    }, options.interval);
+
+    return undefined;
+  }
+
+  /**
+   * Handles the focus event and triggers the onOver callback if not already in a hover state.
+   *
+   * @param {FocusEvent} e - The focus event object.
+   */
+  function handleFocus(e) {
+    if (!mouseOver) {
+      focused = true;
+      onOver.call(el, e);
+    }
+  }
+
+  /**
+   * Handles the blur event and triggers the onOut callback if not in a hover state and focused.
+   *
+   * @param {FocusEvent} e - The blur event object.
+   */
+  function handleBlur(e) {
+    if (!mouseOver && focused) {
+      focused = false;
+      onOut.call(el, e);
+    }
+  }
+
+  /**
+   * Adds focus event listeners.
+   */
+  function addFocus() {
+    el.addEventListener('focus', handleFocus, false);
+    el.addEventListener('blur', handleBlur, false);
+  }
+
+  /**
+   * Removes focus event listeners.
+   */
+  function removeFocus() {
+    el.removeEventListener('focus', handleFocus, false);
+    el.removeEventListener('blur', handleBlur, false);
   }
 
   // Public methods
@@ -108,7 +151,11 @@ const useHoverIntent = (
     options.handleFocus = opt.handleFocus || options.handleFocus;
 
     if (focusOptionChanged) {
-      options.handleFocus ? addFocus() : removeFocus();
+      if (options.handleFocus) {
+        addFocus();
+      } else {
+        removeFocus();
+      }
     }
 
     return this;
@@ -167,46 +214,6 @@ const useHoverIntent = (
     }
 
     return this;
-  }
-
-  /**
-   * Handles the focus event and triggers the onOver callback if not already in a hover state.
-   *
-   * @param {FocusEvent} e - The focus event object.
-   */
-  function handleFocus(e) {
-    if (!mouseOver) {
-      focused = true;
-      onOver.call(el, e);
-    }
-  }
-
-  /**
-   * Handles the blur event and triggers the onOut callback if not in a hover state and focused.
-   *
-   * @param {FocusEvent} e - The blur event object.
-   */
-  function handleBlur(e) {
-    if (!mouseOver && focused) {
-      focused = false;
-      onOut.call(el, e);
-    }
-  }
-
-  /**
-   * Adds focus event listeners.
-   */
-  function addFocus() {
-    el.addEventListener('focus', handleFocus, false);
-    el.addEventListener('blur', handleBlur, false);
-  }
-
-  /**
-   * Removes focus event listeners.
-   */
-  function removeFocus() {
-    el.removeEventListener('focus', handleFocus, false);
-    el.removeEventListener('blur', handleBlur, false);
   }
 
   /**
