@@ -23,12 +23,12 @@ import menuTrackHandler from './menuTrackHandler';
  * @returns {MoveMenuListHandler} A new MoveMenuListHandler instance.
  */
 const moveMenuListHandler = ({
-                               mobileMenuTrack,
-                               menuListElementSelector,
-                               mobileMenuMainWrapper,
-                               nextLevelBtnSelector,
-                               menuListActiveClass,
-                             }) => {
+  mobileMenuTrack,
+  menuListElementSelector,
+  mobileMenuMainWrapper,
+  nextLevelBtnSelector,
+  menuListActiveClass,
+}) => {
   const loadedMenuSet = new Set();
   const {
     add: addToHistory,
