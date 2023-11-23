@@ -2,9 +2,7 @@
 
 namespace Oksydan\IsMainMenu\Handler\MenuElement;
 
-use Oksydan\IsMainMenu\Cache\FrontAjaxRequestCacheKey;
 use Oksydan\IsMainMenu\Cache\ModuleCache;
-use Oksydan\IsMainMenu\Cache\TemplateCache;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use PrestaShop\PrestaShop\Core\Grid\Position\GridPositionUpdater;

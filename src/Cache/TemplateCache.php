@@ -6,7 +6,6 @@ namespace Oksydan\IsMainMenu\Cache;
 
 use Oksydan\IsImageslider\Hook\AbstractCacheableDisplayHook;
 use Oksydan\IsMainMenu\LegacyRepository\ModuleHookLegacyRepository;
-use PrestaShop\PrestaShop\Adapter\Configuration;
 
 class TemplateCache
 {
@@ -28,7 +27,7 @@ class TemplateCache
     public function __construct(
         \Is_mainmenu $module,
         \Context $context,
-        ModuleHookLegacyRepository $hookModuleRepository,
+        ModuleHookLegacyRepository $hookModuleRepository
     ) {
         $this->module = $module;
         $this->context = $context;

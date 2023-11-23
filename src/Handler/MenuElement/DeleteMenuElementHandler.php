@@ -56,6 +56,7 @@ class DeleteMenuElementHandler implements MenuElementHandlerInterface
      * @var ModuleCache
      */
     private ModuleCache $moduleCache;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         MenuElementRepository $menuElementRepository,
@@ -64,7 +65,7 @@ class DeleteMenuElementHandler implements MenuElementHandlerInterface
         MenuElementCategoryRepository $menuElementCategoryRepository,
         MenuElementCustomRepository $menuElementCustomRepository,
         FileEraserFactory $fileEraserFactory,
-        ModuleCache $moduleCache,
+        ModuleCache $moduleCache
     ) {
         $this->entityManager = $entityManager;
         $this->menuElementRepository = $menuElementRepository;

@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Oksydan\IsMainMenu\Form\DataHandler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Oksydan\IsMainMenu\Cache\FrontAjaxRequestCacheKey;
 use Oksydan\IsMainMenu\Cache\ModuleCache;
-use Oksydan\IsMainMenu\Cache\TemplateCache;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\DataHandler\FormDataHandlerInterface;
