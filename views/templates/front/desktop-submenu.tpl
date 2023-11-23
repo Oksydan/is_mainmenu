@@ -8,7 +8,6 @@
     {if $menuElement.banner}
       <div class="menu-banner">
         <a href="{$menuElement.url}" class="menu-banner__link">
-
           <p class="menu-banner__title text-truncate">
               {$menuElement.title}
           </p>
@@ -20,7 +19,6 @@
             alt="{$menuElement.banner.alt}"
             loading="lazy"
           >
-
         </a>
       </div>
     {/if}
@@ -36,9 +34,10 @@
 
 {function renderProduct menuElement=[]}
     {if !empty($menuElement.product)}
-      <a href="{$menuElement.product.url}" class="main-menu__sub-link">
-          {$menuElement.product.name}
-      </a>
+        {include
+          file='module:is_mainmenu/views/templates/front/_partials/desktop-product.tpl'
+          product=$menuElement.product
+        }
     {/if}
 {/function}
 
@@ -69,14 +68,11 @@
 {/function}
 
 {if !empty($menu_tree)}
-  <div class="container">
-
-    <div class="main-menu__sub-content">
-      <div class="main-menu__sub-list row">
-          {foreach $menu_tree as $child}
-              {renderSubmenuColumn menuElement=$child}
-          {/foreach}
-      </div>
+  <div class="main-menu__sub-content">
+    <div class="main-menu__sub-list row">
+        {foreach $menu_tree as $child}
+            {renderSubmenuColumn menuElement=$child}
+        {/foreach}
     </div>
   </div>
 {/if}

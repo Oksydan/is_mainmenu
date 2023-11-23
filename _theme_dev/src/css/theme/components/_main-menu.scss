@@ -1,0 +1,57 @@
+@use "sass:map";
+
+.main-menu {
+  $self: &;
+  margin-top: map.get($spacers, 2);
+
+  &__item-header {
+    display: flex;
+    align-items: center;
+    @include media-breakpoint-up(md) {
+      display: block;
+    }
+  }
+
+  &__link {
+    &--1 {
+      @include font-size($font-size-lg);
+      display: block;
+      padding: map.get($spacers, 2) map.get($spacers, 3);
+      font-weight: 500;
+    }
+  }
+
+  &__list {
+    &--1 {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  &__item {
+    &.active-submenu {
+      #{$self} {
+        &__sub {
+          visibility: visible;
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  &__sub {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: 100;
+    padding: map.get($spacers, 4) map.get($spacers, 4) map.get($spacers, 3);
+    visibility: hidden;
+    background: $white;
+    box-shadow: $box-shadow;
+    opacity: 0;
+    transition: 0.2s ease-in;
+    transform: translateY(5px);
+  }
+}
