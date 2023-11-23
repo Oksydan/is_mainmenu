@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Oksydan\IsMainMenu\Hook;
 
-use Oksydan\IsMainMenu\Cache\TemplateCache;
+use Oksydan\IsMainMenu\Cache\FrontAjaxRequestCacheKey;
 
 class ActionFrontControllerSetMedia extends AbstractHook
 {
-    private TemplateCache $templateCache;
+    private FrontAjaxRequestCacheKey $frontAjaxRequestCacheKey;
 
     public function __construct(
         \Is_mainmenu $module,
         \Context $context,
-        TemplateCache $templateCache
+        FrontAjaxRequestCacheKey $frontAjaxRequestCacheKey
     ) {
         parent::__construct($module, $context);
 
-        $this->templateCache = $templateCache;
+        $this->frontAjaxRequestCacheKey = $frontAjaxRequestCacheKey;
     }
 
     public function execute(array $params): void
@@ -26,12 +26,12 @@ class ActionFrontControllerSetMedia extends AbstractHook
             'getDesktopSubmenuAjaxUrl' => $this->context->link->getModuleLink($this->module->name, 'ajax', [
                 'action' => 'getDesktopSubMenu',
                 'ajax' => '1',
-                'cache_key' => $this->templateCache->getContextBasedRequestCacheKey(),
+                'cache_key' => $this->frontAjaxRequestCacheKey->getContextBasedRequestCacheKey(),
             ]),
             'getMobileSubmenuAjaxUrl' => $this->context->link->getModuleLink($this->module->name, 'ajax', [
                 'action' => 'getMobileSubMenu',
                 'ajax' => '1',
-                'cache_key' => $this->templateCache->getContextBasedRequestCacheKey(),
+                'cache_key' => $this->frontAjaxRequestCacheKey->getContextBasedRequestCacheKey(),
             ]),
         ]);
     }

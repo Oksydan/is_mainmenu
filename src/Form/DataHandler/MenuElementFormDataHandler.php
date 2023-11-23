@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Oksydan\IsMainMenu\Form\DataHandler;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Oksydan\IsMainMenu\Cache\FrontAjaxRequestCacheKey;
+use Oksydan\IsMainMenu\Cache\ModuleCache;
+use Oksydan\IsMainMenu\Cache\TemplateCache;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\DataHandler\FormDataHandlerInterface;
@@ -49,6 +52,11 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
      */
     private MenuElementRepository $menuElementRepository;
 
+    /*
+     * @var ModuleCache
+     */
+    private ModuleCache $moduleCache;
+
     public function __construct(
         MenuElementBannerDataHandler $menuElementBannerDataHandler,
         MenuElementCategoryDataHandler $menuElementCategoryDataHandler,
@@ -57,7 +65,8 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
         MenuElementCmsDataHandler $menuElementCmsDataHandler,
         MenuElementProductDataHandler $menuElementProductDataHandler,
         EntityManagerInterface $entityManager,
-        MenuElementRepository $menuElementRepository
+        MenuElementRepository $menuElementRepository,
+        ModuleCache $moduleCache
     ) {
         $this->menuElementBannerDataHandler = $menuElementBannerDataHandler;
         $this->menuElementCategoryDataHandler = $menuElementCategoryDataHandler;
@@ -67,6 +76,7 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
         $this->menuElementProductDataHandler = $menuElementProductDataHandler;
         $this->entityManager = $entityManager;
         $this->menuElementRepository = $menuElementRepository;
+        $this->moduleCache = $moduleCache;
     }
 
     public function create(array $data)
@@ -94,6 +104,8 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
 
         $this->entityManager->persist($menuElement);
         $this->entityManager->flush();
+
+        $this->clearCache();
 
         return $menuElement->getId();
     }
@@ -139,6 +151,8 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
         $this->entityManager->persist($menuElement);
         $this->entityManager->flush();
 
+        $this->clearCache();
+
         return $menuElement->getId();
     }
 
@@ -158,5 +172,10 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
             $shop = $this->entityManager->getRepository(Shop::class)->find($shopId);
             $menuElement->addShop($shop);
         }
+    }
+
+    private function clearCache(): void
+    {
+        $this->moduleCache->clearCache();
     }
 }
