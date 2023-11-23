@@ -14,6 +14,7 @@ services:
   Oksydan\IsMainMenu\:
     resource: '../../src/*'
     exclude:
-      - '../../src/{Exception,Entity,Controller,Form,Grid,Factory,Handler}'
+      - '../../src/{Exception,Entity,Controller,Form,Grid,Factory}'
+      - '../../src/Handler/{File,MenuElement}'
       - '../../src/index.php'
       - '../../src/*/index.php'

@@ -10,6 +10,10 @@ class ModuleInstaller
         'displayTop',
         'displayMobileMenu',
         'actionFrontControllerSetMedia',
+        'actionCategoryUpdate',
+        'actionCategoryDelete',
+        'actionProductSave',
+        'actionProductDelete',
     ];
 
     private \Module $module;
