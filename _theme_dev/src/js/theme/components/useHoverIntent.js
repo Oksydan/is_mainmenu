@@ -17,7 +17,10 @@ const useHoverIntent = (
   onStartHover = () => {},
   onStartOut = () => {},
 ) => {
-  let x, y, pX, pY;
+  let x;
+  let y;
+  let pX;
+  let pY;
   let isMouseOver = false;
   let isFocused = false;
   let state = 0;
