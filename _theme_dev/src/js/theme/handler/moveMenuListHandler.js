@@ -3,19 +3,32 @@ import mobileMenuHistory from '../components/mobileMenuHistory';
 import menuTrackHandler from './menuTrackHandler';
 
 /**
- * @param mobileMenuTrack
- * @param menuListElementSelector
- * @param mobileMenuMainWrapper
- * @param nextLevelBtnSelector
- * @param menuListActiveClass
+ * Handles the movement and interactions of a mobile menu list.
+ * @typedef {Object} MoveMenuListHandler
+ * @property {function(Number): void} goToMenuList - Navigates to the specified menu list by ID.
+ * @property {function(): void} back - Navigates back to the previous menu list.
+ * @property {function(): void} reset - Resets the menu to its initial state.
+ * @property {function(HTMLElement): Promise<void>} fetchSubMenuAndRender - Fetches and renders submenus for a given menu list.
+ */
+
+/**
+ * Creates a new instance of MoveMenuListHandler.
+ * @function
+ * @param {Object} options - Options for configuring the MoveMenuListHandler.
+ * @param {string} options.mobileMenuTrack - Selector for the mobile menu track element.
+ * @param {string} options.menuListElementSelector - Selector for menu list elements.
+ * @param {string} options.mobileMenuMainWrapper - Selector for the main wrapper of the mobile menu.
+ * @param {string} options.nextLevelBtnSelector - Selector for next-level buttons in the menu.
+ * @param {string} options.menuListActiveClass - CSS class for marking an active menu list.
+ * @returns {MoveMenuListHandler} A new MoveMenuListHandler instance.
  */
 const moveMenuListHandler = ({
-  mobileMenuTrack,
-  menuListElementSelector,
-  mobileMenuMainWrapper,
-  nextLevelBtnSelector,
-  menuListActiveClass,
-}) => {
+                               mobileMenuTrack,
+                               menuListElementSelector,
+                               mobileMenuMainWrapper,
+                               nextLevelBtnSelector,
+                               menuListActiveClass,
+                             }) => {
   const loadedMenuSet = new Set();
   const {
     add: addToHistory,
@@ -25,8 +38,10 @@ const moveMenuListHandler = ({
   let _trackHandler = null;
 
   /**
-   * Get track handler
-   * @return {menuTrackHandler} _trackHandler
+   * Gets the menu track handler.
+   * @function
+   * @inner
+   * @return {MenuTrackHandler} The menu track handler instance.
    */
   const getTrackHandler = () => {
     if (!_trackHandler) {
@@ -37,8 +52,10 @@ const moveMenuListHandler = ({
   };
 
   /**
-   * Set loading class to main wrapper
-   * @param {boolean} isLoading
+   * Sets or removes the loading class from the main wrapper.
+   * @function
+   * @inner
+   * @param {boolean} isLoading - Whether to set or remove the loading class.
    * @return {void}
    */
   const setLoading = (isLoading) => {
@@ -56,9 +73,11 @@ const moveMenuListHandler = ({
   };
 
   /**
-   * Get ids from list
-   * @param {HTMLElement} list
-   * @return {*[int]} ids
+   * Gets the IDs of elements from the given menu list.
+   * @function
+   * @inner
+   * @param {HTMLElement} list - The menu list element.
+   * @return {Array<string>} An array of IDs.
    */
   const getIdsElementsFromList = (list) => {
     const ids = [];
@@ -71,9 +90,11 @@ const moveMenuListHandler = ({
   };
 
   /**
-   * Fetch submenu and render it for given list
-   * @param {HTMLElement} list
-   * @return {Promise<void>}
+   * Fetches submenus and renders them for the given menu list.
+   * @function
+   * @inner
+   * @param {HTMLElement} list - The menu list element.
+   * @return {Promise<void>} A Promise that resolves when the submenus are fetched and rendered.
    */
   const fetchSubMenuAndRender = async (list) => {
     const ids = getIdsElementsFromList(list);
@@ -105,15 +126,19 @@ const moveMenuListHandler = ({
   };
 
   /**
-   * Get calculated depth
-   * @param {Number} depth
-   * @return {number|*}
+   * Gets the calculated depth for transformation.
+   * @function
+   * @inner
+   * @param {Number} depth - The depth of the menu track.
+   * @return {number} The calculated depth for transformation.
    */
   const getDepthToCalc = (depth) => (depth > 0 ? depth - 1 : depth);
 
   /**
-   * Go to menu list
-   * @param {Number} id
+   * Navigates to the specified menu list by ID.
+   * @function
+   * @memberof MoveMenuListHandler
+   * @param {Number} id - The ID of the menu list to navigate to.
    * @return {void}
    */
   const goToMenuList = (id) => {
@@ -136,7 +161,9 @@ const moveMenuListHandler = ({
   };
 
   /**
-   * Back to previous menu list
+   * Navigates back to the previous menu list.
+   * @function
+   * @memberof MoveMenuListHandler
    * @return {void}
    */
   const back = () => {
@@ -158,7 +185,9 @@ const moveMenuListHandler = ({
   };
 
   /**
-   * Reset menu to initial state
+   * Resets the menu to its initial state.
+   * @function
+   * @memberof MoveMenuListHandler
    * @return {void}
    */
   const reset = () => {
@@ -170,7 +199,7 @@ const moveMenuListHandler = ({
     });
 
     moveTrackToDepth(0);
-    goToMenuList(0); // 0 is id of main menu
+    goToMenuList(0); // 0 is the ID of the main menu
     clearHistory();
   };
 
