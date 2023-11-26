@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Oksydan\IsMainMenu\Cache;
 
-use Oksydan\IsImageslider\Hook\AbstractCacheableDisplayHook;
+use Oksydan\IsMainMenu\Hook\AbstractCacheableDisplayHook;
 use Oksydan\IsMainMenu\LegacyRepository\ModuleHookLegacyRepository;
+use Oksydan\IsMainMenu\View\Front\DesktopSubMenuRender;
+use Oksydan\IsMainMenu\View\Front\MobileSubMenuRender;
 
 class TemplateCache
 {
@@ -24,14 +26,28 @@ class TemplateCache
      */
     protected ModuleHookLegacyRepository $hookModuleRepository;
 
+    /*
+     * @var DesktopSubMenuRender
+     */
+    protected DesktopSubMenuRender $desktopSubMenuRender;
+
+    /*
+     * @var MobileSubMenuRender
+     */
+    protected MobileSubMenuRender $mobileSubMenuRender;
+
     public function __construct(
         \Is_mainmenu $module,
         \Context $context,
-        ModuleHookLegacyRepository $hookModuleRepository
+        ModuleHookLegacyRepository $hookModuleRepository,
+        DesktopSubMenuRender $desktopSubMenuRender,
+        MobileSubMenuRender $mobileSubMenuRender
     ) {
         $this->module = $module;
         $this->context = $context;
         $this->hookModuleRepository = $hookModuleRepository;
+        $this->desktopSubMenuRender = $desktopSubMenuRender;
+        $this->mobileSubMenuRender = $mobileSubMenuRender;
     }
 
     public function clearTemplateCache(): void
@@ -48,6 +64,9 @@ class TemplateCache
         foreach ($uniqueHooks as $hook) {
             $this->clearCacheForHook($hook);
         }
+
+        $this->desktopSubMenuRender->clearCache();
+        $this->mobileSubMenuRender->clearCache();
     }
 
     private function clearCacheForHook($hookName): void
