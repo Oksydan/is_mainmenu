@@ -32,7 +32,7 @@ class ProductDeleteHandler implements ProductHandlerInterface
         $productMenuElements = $this->menuElementProductRepository->findMenuElementsProductByProductId((int) $product->id);
 
         foreach ($productMenuElements as $productMenuElement) {
-            $this->handleMenuElementCategoryDelete($productMenuElement);
+            $this->handleMenuElementProductDelete($productMenuElement);
         }
 
         if (!empty($productMenuElements)) {
@@ -42,7 +42,7 @@ class ProductDeleteHandler implements ProductHandlerInterface
         }
     }
 
-    private function handleMenuElementCategoryDelete(MenuElementProduct $productMenuElement): void
+    private function handleMenuElementProductDelete(MenuElementProduct $productMenuElement): void
     {
         $menuElement = $productMenuElement->getMenuElement();
 
