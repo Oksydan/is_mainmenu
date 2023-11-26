@@ -34,4 +34,3 @@ class MenuElementCmsRepository extends ServiceEntityRepository
         return $this->findBy(['idCMS' => $cmsId]);
     }
 }
-

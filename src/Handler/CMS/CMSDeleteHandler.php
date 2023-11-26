@@ -25,7 +25,6 @@ class CMSDeleteHandler implements CMSHandlerInterface
         $this->entityManager = $entityManager;
     }
 
-
     public function handle(\CMS $cms): void
     {
         $cmsMenuElements = $this->menuElementCmsRepository->findMenuElementsCmsByCmsId((int) $cms->id);

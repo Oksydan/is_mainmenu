@@ -19,7 +19,6 @@ class CMSUpdateHandler implements CMSHandlerInterface
         $this->menuElementCmsRepository = $menuElementCmsRepository;
     }
 
-
     public function handle(\CMS $cms): void
     {
         $countMenuElementProduct = $this->menuElementCmsRepository->findCountMenuElementCmsByCmsId((int) $cms->id);
