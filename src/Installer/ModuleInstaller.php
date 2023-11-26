@@ -14,6 +14,8 @@ class ModuleInstaller
         'actionCategoryDelete',
         'actionProductSave',
         'actionProductDelete',
+        'actionObjectCmsUpdateAfter',
+        'actionObjectCmsDeleteAfter',
     ];
 
     private \Module $module;

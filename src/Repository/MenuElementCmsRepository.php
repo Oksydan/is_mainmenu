@@ -20,4 +20,18 @@ class MenuElementCmsRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['menuElement' => $menuElement]);
     }
+
+    public function findCountMenuElementCmsByCmsId(int $cmsId): int
+    {
+        return $this->count(['idCMS' => $cmsId]);
+    }
+
+    /**
+     * @return MenuElementCms[]
+     */
+    public function findMenuElementsCmsByCmsId(int $cmsId): array
+    {
+        return $this->findBy(['idCMS' => $cmsId]);
+    }
 }
+
