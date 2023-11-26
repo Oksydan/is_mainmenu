@@ -26,7 +26,7 @@
 
 {function renderMenuLink menuElement=[]}
   <div>
-    <a href="{$menuElement.url}" class="main-menu__sub-link">
+    <a href="{$menuElement.url}" class="f-main-menu__sub-link">
         {$menuElement.title}
     </a>
   </div>
@@ -68,8 +68,8 @@
 {/function}
 
 {if !empty($menu_tree)}
-  <div class="main-menu__sub-content">
-    <div class="main-menu__sub-list row">
+  <div class="f-main-menu__sub-content">
+    <div class="f-main-menu__sub-list row">
         {foreach $menu_tree as $child}
             {renderSubmenuColumn menuElement=$child}
         {/foreach}
