@@ -34,7 +34,7 @@ abstract class AbstractMenuRender implements MenuFrontRenderInterface
         return "module:{$this->module->name}/views/templates/front/$this->templateFile";
     }
 
-    public function clearCache()
+    public function clearCache(): void
     {
         $this->context->smarty->clearCache(
             $this->module->getTemplatePath($this->getTemplate()),

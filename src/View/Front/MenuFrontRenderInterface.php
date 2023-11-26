@@ -10,4 +10,6 @@ interface MenuFrontRenderInterface
      * @return string
      */
     public function render(int $idMenuElement): string;
+
+    public function clearCache(): void;
 }
