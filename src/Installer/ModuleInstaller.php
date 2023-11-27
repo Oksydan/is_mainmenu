@@ -9,6 +9,13 @@ class ModuleInstaller
     const HOOKS_LIST = [
         'displayTop',
         'displayMobileMenu',
+        'actionFrontControllerSetMedia',
+        'actionCategoryUpdate',
+        'actionCategoryDelete',
+        'actionProductSave',
+        'actionProductDelete',
+        'actionObjectCmsUpdateAfter',
+        'actionObjectCmsDeleteAfter',
     ];
 
     private \Module $module;

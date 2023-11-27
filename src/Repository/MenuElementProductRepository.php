@@ -20,4 +20,17 @@ class MenuElementProductRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['menuElement' => $menuElement]);
     }
+
+    public function findCountMenuElementProductByProductId(int $idProduct): int
+    {
+        return $this->count(['id_product' => $idProduct]);
+    }
+
+    /**
+     * @return MenuElementProduct[]
+     */
+    public function findMenuElementsProductByProductId(int $idProduct): array
+    {
+        return $this->findBy(['id_product' => $idProduct]);
+    }
 }

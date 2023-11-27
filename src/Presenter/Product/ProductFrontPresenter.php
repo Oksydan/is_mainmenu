@@ -3,24 +3,15 @@
 namespace Oksydan\IsMainMenu\Presenter\Product;
 
 use PrestaShop\PrestaShop\Adapter\Presenter\Product\ProductLazyArray;
-use PrestaShop\PrestaShop\Adapter\Presenter\Product\ProductPresenter;
-use PrestaShop\PrestaShop\Core\Product\ProductPresentationSettings;
 
 class ProductFrontPresenter implements ProductFrontPresenterInterface
 {
     protected \Context $context;
-    protected \ProductAssembler $productAssembler;
-    protected ProductPresentationSettings $presentationSettings;
-    protected ProductPresenter $presenter;
 
     public function __construct(
         \Context $context
     ) {
         $this->context = $context;
-        $presenterFactory = new \ProductPresenterFactory($context);
-        $this->productAssembler = new \ProductAssembler($context);
-        $this->presentationSettings = $presenterFactory->getPresentationSettings();
-        $this->presenter = $presenterFactory->getPresenter();
     }
 
     /**
@@ -30,10 +21,18 @@ class ProductFrontPresenter implements ProductFrontPresenterInterface
      */
     public function present(array $product): ProductLazyArray
     {
-        return $this->presenter->present(
-            $this->presentationSettings,
-            $this->productAssembler->assembleProduct($product),
+        $presenterFactory = $this->presenterFactory();
+        $presenter = $presenterFactory->getPresenter();
+
+        return $presenter->present(
+            $presenterFactory->getPresentationSettings(),
+            (new \ProductAssembler($this->context))->assembleProduct($product),
             $this->context->language
         );
+    }
+
+    private function presenterFactory(): \ProductPresenterFactory
+    {
+        return new \ProductPresenterFactory($this->context);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Oksydan\IsMainMenu\Handler\MenuElement;
 
+use Oksydan\IsMainMenu\Cache\ModuleCache;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use PrestaShop\PrestaShop\Core\Grid\Position\GridPositionUpdater;
@@ -14,12 +15,16 @@ class UpdateMenuElementPositionHandler
 
     private MenuElementRepository $menuElementRepository;
 
+    private ModuleCache $moduleCache;
+
     public function __construct(
         GridPositionUpdater $gridPositionUpdater,
-        MenuElementRepository $menuElementRepository
+        MenuElementRepository $menuElementRepository,
+        ModuleCache $moduleCache
     ) {
         $this->gridPositionUpdater = $gridPositionUpdater;
         $this->menuElementRepository = $menuElementRepository;
+        $this->moduleCache = $moduleCache;
     }
 
     public function handle(array $positions): int
@@ -60,6 +65,8 @@ class UpdateMenuElementPositionHandler
         $positionUpdate = $positionUpdateFactory->buildPositionUpdate($positionsData, $positionDefinition);
 
         $this->gridPositionUpdater->update($positionUpdate);
+
+        $this->moduleCache->clearCache();
 
         return $parentId;
     }

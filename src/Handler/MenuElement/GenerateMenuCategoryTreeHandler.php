@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oksydan\IsMainMenu\Handler\MenuElement;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Oksydan\IsMainMenu\Cache\ModuleCache;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Entity\MenuElementCategory;
 use Oksydan\IsMainMenu\Entity\MenuElementCategoryLang;
@@ -49,6 +50,11 @@ class GenerateMenuCategoryTreeHandler implements MenuElementHandlerInterface
     private Configuration $configuration;
 
     /**
+     * @var ModuleCache
+     */
+    private ModuleCache $moduleCache;
+
+    /**
      * @var LangRepository
      */
     private LangRepository $langRepository;
@@ -80,6 +86,7 @@ class GenerateMenuCategoryTreeHandler implements MenuElementHandlerInterface
         MenuElementCategoryRepository $menuElementCategoryRepository,
         CategoryLegacyRepository $categoryLegacyRepository,
         Configuration $configuration,
+        ModuleCache $moduleCache,
         LangRepository $langRepository,
         array $languages
     ) {
@@ -89,6 +96,7 @@ class GenerateMenuCategoryTreeHandler implements MenuElementHandlerInterface
         $this->menuElementCategoryRepository = $menuElementCategoryRepository;
         $this->categoryLegacyRepository = $categoryLegacyRepository;
         $this->configuration = $configuration;
+        $this->moduleCache = $moduleCache;
         $this->langRepository = $langRepository;
         $this->languages = $languages;
     }
@@ -102,6 +110,8 @@ class GenerateMenuCategoryTreeHandler implements MenuElementHandlerInterface
             $this->buildCategoryTree($menuElement, $menuElementCategory);
 
             $this->entityManager->flush();
+
+            $this->moduleCache->clearCache();
         }
     }
 

@@ -6,7 +6,7 @@ permissions:
   contents: read
 
 jobs:
-  stylelint:
+  stylelint-admin:
     name: Code quality admin code - SCSS Lint
     runs-on: ubuntu-latest
     steps:
@@ -23,7 +23,7 @@ jobs:
       - name: Stylelint action
         run: cd ./_admin_dev && npm run scss-lint
 
-  eslint:
+  eslint-admin:
     name: Code quality admin code - ESLint
     runs-on: ubuntu-latest
     steps:
@@ -39,3 +39,37 @@ jobs:
 
       - name: Eslint action
         run: cd ./_admin_dev && npm run js-lint
+
+  stylelint-front:
+    name: Code quality front office code - SCSS Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: cd ./_theme_dev && npm install
+
+      - name: Stylelint action
+        run: cd ./_theme_dev && npm run scss-lint
+
+  eslint-front:
+    name: Code quality front office code - ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: cd ./_theme_dev && npm install
+
+      - name: Eslint action
+        run: cd ./_theme_dev && npm run js-lint

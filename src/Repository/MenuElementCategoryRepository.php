@@ -20,4 +20,17 @@ class MenuElementCategoryRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['menuElement' => $menuElement]);
     }
+
+    public function findCountMenuElementCategoryByCategoryId(int $idCategory): int
+    {
+        return $this->count(['idCategory' => $idCategory]);
+    }
+
+    /**
+     * @return MenuElementCategory[]
+     */
+    public function findMenuElementsCategoryByCategoryId(int $idCategory): array
+    {
+        return $this->findBy(['idCategory' => $idCategory]);
+    }
 }

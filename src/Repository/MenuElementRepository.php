@@ -78,4 +78,9 @@ class MenuElementRepository extends ServiceEntityRepository
     {
         return $menuElement->getParentMenuElement();
     }
+
+    public function getMenuElementById(int $id): ?MenuElement
+    {
+        return $this->find($id);
+    }
 }

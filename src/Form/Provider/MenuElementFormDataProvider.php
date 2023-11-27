@@ -130,7 +130,7 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
                 break;
             case MenuElement::TYPE_HTML:
                 $data = array_merge($data, $this->getHtmlElementData($id));
-                // no break
+                break;
             case MenuElement::TYPE_CMS:
                 $data = array_merge($data, $this->getCMSElementData($id));
                 break;
@@ -291,7 +291,7 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
         return $data;
     }
 
-    public function getDefaultData()
+    public function getDefaultData(): array
     {
         return [
             'name' => '',

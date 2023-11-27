@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Oksydan\IsMainMenu\Controller;
 
 use Oksydan\IsMainMenu\Form\AutocompleteRender\AutocompleteSelectedProductRender;
+use Oksydan\IsMainMenu\LegacyRepository\ProductLegacyRepository;
 use Oksydan\IsMainMenu\Presenter\Product\ProductAutocompletePresenter;
-use Oksydan\IsMainMenu\Repository\ProductLegacyRepository;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
