@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Oksydan\IsMainMenu\Installer;
 
+use Oksydan\IsMainMenu\Menu\MenuLayoutGrid;
+
 class ModuleInstaller
 {
-    const HOOKS_LIST = [
+    public const HOOKS_LIST = [
         'displayTop',
         'displayMobileMenu',
         'actionFrontControllerSetMedia',
@@ -54,7 +56,7 @@ class ModuleInstaller
         $success = true;
 
         $sql = [
-            'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'menu_element` (
+            'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . "menu_element` (
                 `id_menu_element` int(11) NOT NULL AUTO_INCREMENT,
                 `id_parent_menu_element` int(11) DEFAULT 0,
                 `active` int(1) NOT NULL DEFAULT 0,
@@ -66,8 +68,9 @@ class ModuleInstaller
                 `type` varchar(32) NOT NULL,
                 `name` varchar(256) NOT NULL,
                 `css_class` varchar(512) NOT NULL,
+                `grid_type` varchar(32) NOT NULL default '" . MenuLayoutGrid::GRID_12 . "',
                 PRIMARY KEY (`id_menu_element`)
-            ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;',
+            ) ENGINE=" . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;',
         ];
 
         $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'menu_element_shop` (

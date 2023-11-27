@@ -13,6 +13,7 @@ use Oksydan\IsMainMenu\Entity\MenuElementProduct;
 use Oksydan\IsMainMenu\Entity\MenuElementRelatedEntityInterface;
 use Oksydan\IsMainMenu\Menu\MenuElementRelatedElementProvider;
 use Oksydan\IsMainMenu\Menu\MenuElementVisibilityManager;
+use Oksydan\IsMainMenu\Menu\MenuLayoutGrid;
 use Oksydan\IsMainMenu\Presenter\Product\ProductFrontPresenter;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 
@@ -202,6 +203,45 @@ class MenuElementPresenter implements MenuElementPresenterInterface
             'css_class' => $menuElement->getCssClass(),
             'depth' => $menuElement->getDepth(),
             'has_children' => $this->hasChildren($menuElement, $menuType),
+            'grid_class' => $this->getDesktopGridClass($menuElement),
         ];
+    }
+
+    private function getDesktopGridClass(MenuElement $menuElement): string
+    {
+        $gridType = $menuElement->getGridType();
+
+        switch ($gridType) {
+            case MenuLayoutGrid::GRID_AUTO:
+                return 'col-auto';
+            case MenuLayoutGrid::GRID_FILL:
+                return 'col';
+            case MenuLayoutGrid::GRID_1:
+                return 'col-1';
+            case MenuLayoutGrid::GRID_2:
+                return 'col-2';
+            case MenuLayoutGrid::GRID_3:
+                return 'col-3';
+            case MenuLayoutGrid::GRID_4:
+                return 'col-4';
+            case MenuLayoutGrid::GRID_5:
+                return 'col-5';
+            case MenuLayoutGrid::GRID_6:
+                return 'col-6';
+            case MenuLayoutGrid::GRID_7:
+                return 'col-7';
+            case MenuLayoutGrid::GRID_8:
+                return 'col-8';
+            case MenuLayoutGrid::GRID_9:
+                return 'col-9';
+            case MenuLayoutGrid::GRID_10:
+                return 'col-10';
+            case MenuLayoutGrid::GRID_11:
+                return 'col-11';
+            case MenuLayoutGrid::GRID_12:
+                return 'col-12';
+            default:
+                return '';
+        }
     }
 }
