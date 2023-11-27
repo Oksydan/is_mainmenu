@@ -54,7 +54,7 @@
 {/function}
 
 {function renderSubmenuColumn menuElement=[]}
-  <div class="col">
+  <div class="{if $menuElement.grid_class}{$menuElement.grid_class}{/if} {if $menuElement.css_class}{$menuElement.css_class}{/if}">
       {renderSubmenuColumnContent menuElement=$menuElement}
 
       {if $child.children}

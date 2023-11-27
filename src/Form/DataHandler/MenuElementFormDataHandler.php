@@ -7,6 +7,7 @@ namespace Oksydan\IsMainMenu\Form\DataHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Oksydan\IsMainMenu\Cache\ModuleCache;
 use Oksydan\IsMainMenu\Entity\MenuElement;
+use Oksydan\IsMainMenu\Menu\MenuLayoutGrid;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\DataHandler\FormDataHandlerInterface;
 use PrestaShopBundle\Entity\Shop;
@@ -88,6 +89,7 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
         $menuElement->setDisplayMobile($data['display_mobile'] ?? true);
         $menuElement->setDisplayDesktop($data['display_desktop'] ?? true);
         $menuElement->setPosition(0);
+        $menuElement->setGridType($data['grid_type'] ?? MenuLayoutGrid::GRID_12);
         $this->addAssociatedShops($menuElement, $data['shop_association'] ?? null);
 
         if ($data['id_parent_element']) {
@@ -117,6 +119,7 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
         $menuElement->setCssClass($data['css_class'] ?? '');
         $menuElement->setDisplayMobile($data['display_mobile'] ?? true);
         $menuElement->setDisplayDesktop($data['display_desktop'] ?? true);
+        $menuElement->setGridType($data['grid_type'] ?? MenuLayoutGrid::GRID_12);
         $this->addAssociatedShops($menuElement, $data['shop_association'] ?? null);
 
         $menuRelatedElement = null;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oksydan\IsMainMenu\Form\Provider;
 
-use Is_mainmenu;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Entity\MenuElementBanner;
 use Oksydan\IsMainMenu\Entity\MenuElementCategory;
@@ -12,6 +11,7 @@ use Oksydan\IsMainMenu\Entity\MenuElementCms;
 use Oksydan\IsMainMenu\Entity\MenuElementCustom;
 use Oksydan\IsMainMenu\Entity\MenuElementHtml;
 use Oksydan\IsMainMenu\Entity\MenuElementProduct;
+use Oksydan\IsMainMenu\Menu\MenuLayoutGrid;
 use Oksydan\IsMainMenu\Repository\MenuElementBannerRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCategoryRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementCmsRepository;
@@ -110,6 +110,7 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
             'display_desktop' => $menuElement->getDisplayDesktop(),
             'display_mobile' => $menuElement->getDisplayMobile(),
             'position' => $menuElement->getPosition(),
+            'grid_type' => $menuElement->getGridType(),
         ];
 
         $parentMenuElement = $menuElement->getParentMenuElement();
@@ -303,6 +304,7 @@ class MenuElementFormDataProvider implements FormDataProviderInterface
             'position' => 0,
             'id_parent_element' => $this->menuElementRepository->getRootElement()->getId(),
             'shop_association' => $this->contextAdapter->getContextListShopID(),
+            'grid_type' => MenuLayoutGrid::GRID_12,
             'product' => [
                 'id_product' => 0,
                 'id_product_attribute' => 0,

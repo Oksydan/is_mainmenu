@@ -6,6 +6,7 @@ namespace Oksydan\IsMainMenu\Form\Type;
 
 use Oksydan\IsMainMenu\Entity\MenuELement;
 use Oksydan\IsMainMenu\Form\ChoiceProvider\CMSPagesChoiceProvider;
+use Oksydan\IsMainMenu\Form\ChoiceProvider\MenuLayoutGridChoiceProvider;
 use Oksydan\IsMainMenu\Form\ChoiceProvider\MenuTypeChoiceProvider;
 use Oksydan\IsMainMenu\Translations\TranslationDomains;
 use PrestaShop\PrestaShop\Adapter\Feature\MultistoreFeature;
@@ -45,6 +46,14 @@ class MenuElementType extends TranslatorAwareType
      */
     private CMSPagesChoiceProvider $cmsPagesChoiceProvider;
 
+    /*
+     * @var MenuLayoutGridChoiceProvider
+     */
+    private MenuLayoutGridChoiceProvider $menuLayoutGridChoiceProvider;
+
+    /*
+     * @var RouterInterface
+     */
     private RouterInterface $router;
 
     public function __construct(
@@ -53,6 +62,7 @@ class MenuElementType extends TranslatorAwareType
         MultistoreFeature $multistoreFeature,
         MenuTypeChoiceProvider $menuTypeChoiceProvider,
         CMSPagesChoiceProvider $cmsPagesChoiceProvider,
+        MenuLayoutGridChoiceProvider $menuLayoutGridChoiceProvider,
         RouterInterface $router
     ) {
         parent::__construct($translator, $locales);
@@ -60,6 +70,7 @@ class MenuElementType extends TranslatorAwareType
         $this->multistoreFeature = $multistoreFeature;
         $this->menuTypeChoiceProvider = $menuTypeChoiceProvider;
         $this->cmsPagesChoiceProvider = $cmsPagesChoiceProvider;
+        $this->menuLayoutGridChoiceProvider = $menuLayoutGridChoiceProvider;
         $this->router = $router;
     }
 
@@ -277,6 +288,12 @@ class MenuElementType extends TranslatorAwareType
                 'label' => $this->trans('Css classes for this element', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
                 'help' => $this->trans('Extra css class that will be added to menu item', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
                 'required' => false,
+            ])
+            ->add('grid_type', ChoiceType::class, [
+                'required' => true,
+                'label' => $this->trans('Menu desktop bootstrap grid', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'help' => $this->trans('It\'s only working menu element with depth > 1', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'choices' => $this->menuLayoutGridChoiceProvider->getChoices(),
             ]);
 
         if (!empty($options['data']['id_parent_element']) && $options['data']['id_parent_element']) {

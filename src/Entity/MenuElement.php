@@ -122,6 +122,13 @@ class MenuElement
     private $cssClass;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="grid_type", type="text")
+     */
+    private $gridType;
+
+    /**
      * @ORM\ManyToMany(targetEntity="PrestaShopBundle\Entity\Shop", cascade={"persist"})
      *
      * @ORM\JoinTable(
@@ -344,6 +351,26 @@ class MenuElement
     public function setCssClass(string $cssClass): MenuElement
     {
         $this->cssClass = $cssClass;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGridType(): string
+    {
+        return $this->gridType;
+    }
+
+    /**
+     * @param string $gridType
+     *
+     * @return MenuElement $this
+     */
+    public function setGridType(string $gridType): MenuElement
+    {
+        $this->gridType = $gridType;
 
         return $this;
     }
