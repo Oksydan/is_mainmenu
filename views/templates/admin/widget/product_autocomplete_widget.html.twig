@@ -1,0 +1,26 @@
+
+<div class="js-autocomplete-product-widget autocomplete-product-widget">
+  {{ form_errors(form) }}
+  <div class="form-group">
+    {%- for child in form %}
+      {% if child.vars.name == 'product_query' %}
+        {{- form_widget(child) -}}
+
+        <div class="js-autocomplete-product-result">
+        </div>
+
+        <div class="js-autocomplete-product-selected">
+          {% if child.parent.vars.value.product_selected is defined and child.parent.vars.value.product_selected is not empty %}
+            {{ child.parent.vars.value.product_selected|raw }}
+          {% endif %}
+        </div>
+
+        {{- form_help(child) -}}
+      {% else %}
+        {{- form_widget(child) -}}
+        {{- form_help(child) -}}
+      {% endif %}
+    {% endfor -%}
+  </div>
+</div>
+

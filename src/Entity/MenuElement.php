@@ -22,6 +22,10 @@ class MenuElement
 
     const TYPE_HTML = 'html';
 
+    const TYPE_CMS = 'cms';
+
+    const TYPE_PRODUCT = 'product';
+
     // USED ONLY FOR ROOT ELEMENT
     const TYPE_ROOT = 'root';
 
@@ -30,6 +34,8 @@ class MenuElement
         self::TYPE_LINK,
         self::TYPE_BANNER,
         self::TYPE_HTML,
+        self::TYPE_CMS,
+        self::TYPE_PRODUCT,
     ];
 
     /**
@@ -114,6 +120,13 @@ class MenuElement
      * @ORM\Column(name="css_class", type="text")
      */
     private $cssClass;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="grid_type", type="text")
+     */
+    private $gridType;
 
     /**
      * @ORM\ManyToMany(targetEntity="PrestaShopBundle\Entity\Shop", cascade={"persist"})
@@ -338,6 +351,26 @@ class MenuElement
     public function setCssClass(string $cssClass): MenuElement
     {
         $this->cssClass = $cssClass;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGridType(): string
+    {
+        return $this->gridType;
+    }
+
+    /**
+     * @param string $gridType
+     *
+     * @return MenuElement $this
+     */
+    public function setGridType(string $gridType): MenuElement
+    {
+        $this->gridType = $gridType;
 
         return $this;
     }

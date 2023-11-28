@@ -31,7 +31,7 @@ class MenuElementHtmlDataHandler implements RelatedEntitiesFormDataHandlerInterf
     public function __construct(
         MenuElementHtmlRepository $menuElementHtmlRepository,
         LangRepository $langRepository,
-        array $languages,
+        array $languages
     ) {
         $this->menuElementHtmlRepository = $menuElementHtmlRepository;
         $this->langRepository = $langRepository;

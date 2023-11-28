@@ -14,6 +14,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 
 use Oksydan\IsMainMenu\Hook\HookInterface;
 use Oksydan\IsMainMenu\Installer\ModuleInstaller;
+use Oksydan\IsMainMenu\Translations\TranslationDomains;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
@@ -32,9 +33,15 @@ class Is_mainmenu extends Module
         $this->bootstrap = true;
         parent::__construct();
 
-        $this->displayName = 'Main menu module';
-        $this->description = 'Main menu module';
-        $this->ps_versions_compliancy = ['min' => '8.0.0', 'max' => _PS_VERSION_];
+        $this->displayName = $this->trans('Main menu module', [], TranslationDomains::TRANSLATION_DOMAIN_ADMIN);
+        $this->description = $this->trans('Main menu module', [], TranslationDomains::TRANSLATION_DOMAIN_ADMIN);
+        $this->controllers = ['ajax'];
+        $this->ps_versions_compliancy = ['min' => '8.1.0', 'max' => _PS_VERSION_];
+    }
+
+    public function isUsingNewTranslationSystem()
+    {
+        return true;
     }
 
     private function getModuleInstaller(): ModuleInstaller

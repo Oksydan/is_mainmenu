@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Oksydan\IsMainMenu\Form\DataHandler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
+use Oksydan\IsMainMenu\Cache\ModuleCache;
 use Oksydan\IsMainMenu\Entity\MenuElement;
+use Oksydan\IsMainMenu\Menu\MenuLayoutGrid;
+use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\DataHandler\FormDataHandlerInterface;
 use PrestaShopBundle\Entity\Shop;
 
@@ -32,6 +34,13 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
      */
     private MenuElementHtmlDataHandler $menuElementHtmlDataHandler;
 
+    /*
+     * @var MenuElementCmsDataHandler
+     */
+    private MenuElementCmsDataHandler $menuElementCmsDataHandler;
+
+    private MenuElementProductDataHandler $menuElementProductDataHandler;
+
     /**
      * @var EntityManagerInterface
      */
@@ -40,22 +49,33 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
     /*
      * @var EntityRepository
      */
-    private EntityRepository $menuElementRepository;
+    private MenuElementRepository $menuElementRepository;
+
+    /*
+     * @var ModuleCache
+     */
+    private ModuleCache $moduleCache;
 
     public function __construct(
         MenuElementBannerDataHandler $menuElementBannerDataHandler,
         MenuElementCategoryDataHandler $menuElementCategoryDataHandler,
         MenuElementCustomDataHandler $menuElementCustomDataHandler,
         MenuElementHtmlDataHandler $menuElementHtmlDataHandler,
+        MenuElementCmsDataHandler $menuElementCmsDataHandler,
+        MenuElementProductDataHandler $menuElementProductDataHandler,
         EntityManagerInterface $entityManager,
-        EntityRepository $menuElementRepository
+        MenuElementRepository $menuElementRepository,
+        ModuleCache $moduleCache
     ) {
         $this->menuElementBannerDataHandler = $menuElementBannerDataHandler;
         $this->menuElementCategoryDataHandler = $menuElementCategoryDataHandler;
         $this->menuElementCustomDataHandler = $menuElementCustomDataHandler;
         $this->menuElementHtmlDataHandler = $menuElementHtmlDataHandler;
+        $this->menuElementCmsDataHandler = $menuElementCmsDataHandler;
+        $this->menuElementProductDataHandler = $menuElementProductDataHandler;
         $this->entityManager = $entityManager;
         $this->menuElementRepository = $menuElementRepository;
+        $this->moduleCache = $moduleCache;
     }
 
     public function create(array $data)
@@ -69,6 +89,7 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
         $menuElement->setDisplayMobile($data['display_mobile'] ?? true);
         $menuElement->setDisplayDesktop($data['display_desktop'] ?? true);
         $menuElement->setPosition(0);
+        $menuElement->setGridType($data['grid_type'] ?? MenuLayoutGrid::GRID_12);
         $this->addAssociatedShops($menuElement, $data['shop_association'] ?? null);
 
         if ($data['id_parent_element']) {
@@ -84,6 +105,8 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
         $this->entityManager->persist($menuElement);
         $this->entityManager->flush();
 
+        $this->clearCache();
+
         return $menuElement->getId();
     }
 
@@ -96,6 +119,7 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
         $menuElement->setCssClass($data['css_class'] ?? '');
         $menuElement->setDisplayMobile($data['display_mobile'] ?? true);
         $menuElement->setDisplayDesktop($data['display_desktop'] ?? true);
+        $menuElement->setGridType($data['grid_type'] ?? MenuLayoutGrid::GRID_12);
         $this->addAssociatedShops($menuElement, $data['shop_association'] ?? null);
 
         $menuRelatedElement = null;
@@ -113,6 +137,12 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
             case MenuELement::TYPE_HTML:
                 $menuRelatedElement = $this->menuElementHtmlDataHandler->handle($menuElement, $data);
                 break;
+            case MenuELement::TYPE_CMS:
+                $menuRelatedElement = $this->menuElementCmsDataHandler->handle($menuElement, $data);
+                break;
+            case MenuELement::TYPE_PRODUCT:
+                $menuRelatedElement = $this->menuElementProductDataHandler->handle($menuElement, $data);
+                break;
         }
 
         if ($menuRelatedElement) {
@@ -121,6 +151,8 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
 
         $this->entityManager->persist($menuElement);
         $this->entityManager->flush();
+
+        $this->clearCache();
 
         return $menuElement->getId();
     }
@@ -141,5 +173,10 @@ class MenuElementFormDataHandler implements FormDataHandlerInterface
             $shop = $this->entityManager->getRepository(Shop::class)->find($shopId);
             $menuElement->addShop($shop);
         }
+    }
+
+    private function clearCache(): void
+    {
+        $this->moduleCache->clearCache();
     }
 }

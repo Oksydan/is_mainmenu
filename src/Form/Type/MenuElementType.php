@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Oksydan\IsMainMenu\Form\Type;
 
 use Oksydan\IsMainMenu\Entity\MenuELement;
+use Oksydan\IsMainMenu\Form\ChoiceProvider\CMSPagesChoiceProvider;
+use Oksydan\IsMainMenu\Form\ChoiceProvider\MenuLayoutGridChoiceProvider;
 use Oksydan\IsMainMenu\Form\ChoiceProvider\MenuTypeChoiceProvider;
 use Oksydan\IsMainMenu\Translations\TranslationDomains;
 use PrestaShop\PrestaShop\Adapter\Feature\MultistoreFeature;
@@ -20,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -38,16 +41,37 @@ class MenuElementType extends TranslatorAwareType
      */
     private MenuTypeChoiceProvider $menuTypeChoiceProvider;
 
+    /*
+     * @var CMSPagesChoiceProvider
+     */
+    private CMSPagesChoiceProvider $cmsPagesChoiceProvider;
+
+    /*
+     * @var MenuLayoutGridChoiceProvider
+     */
+    private MenuLayoutGridChoiceProvider $menuLayoutGridChoiceProvider;
+
+    /*
+     * @var RouterInterface
+     */
+    private RouterInterface $router;
+
     public function __construct(
         TranslatorInterface $translator,
         array $locales,
         MultistoreFeature $multistoreFeature,
-        MenuTypeChoiceProvider $menuTypeChoiceProvider
+        MenuTypeChoiceProvider $menuTypeChoiceProvider,
+        CMSPagesChoiceProvider $cmsPagesChoiceProvider,
+        MenuLayoutGridChoiceProvider $menuLayoutGridChoiceProvider,
+        RouterInterface $router
     ) {
         parent::__construct($translator, $locales);
 
         $this->multistoreFeature = $multistoreFeature;
         $this->menuTypeChoiceProvider = $menuTypeChoiceProvider;
+        $this->cmsPagesChoiceProvider = $cmsPagesChoiceProvider;
+        $this->menuLayoutGridChoiceProvider = $menuLayoutGridChoiceProvider;
+        $this->router = $router;
     }
 
     /**
@@ -72,6 +96,12 @@ class MenuElementType extends TranslatorAwareType
                     break;
                 case MenuElement::TYPE_HTML:
                     $builder = $this->buildHtmlType($builder, $options);
+                    break;
+                case MenuElement::TYPE_CMS:
+                    $builder = $this->buildCMSType($builder, $options);
+                    break;
+                case MenuElement::TYPE_PRODUCT:
+                    $builder = $this->buildProductType($builder, $options);
                     break;
                 default:
                     throw new \Exception('Unknown type: ' . $options['data']['menu_element']['type'] . ' for menu element');
@@ -201,6 +231,37 @@ class MenuElementType extends TranslatorAwareType
         return $builder;
     }
 
+    private function buildCMSType(FormBuilderInterface $builder, array $options): FormBuilderInterface
+    {
+        $builder
+            ->add('custom_name', TranslatableType::class, [
+                'type' => TextType::class,
+                'label' => $this->trans('Content title', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'locales' => $this->locales,
+                'required' => true,
+            ])
+            ->add('id_cms', ChoiceType::class, [
+                'required' => true,
+                'label' => $this->trans('CMS page', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'choices' => $this->cmsPagesChoiceProvider->getChoices(),
+            ]);
+
+        return $builder;
+    }
+
+    private function buildProductType(FormBuilderInterface $builder, array $options): FormBuilderInterface
+    {
+        $builder
+            ->add('product', ProductAutocompleteType::class, [
+                'label' => $this->trans('Product autocomplete', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'required' => true,
+                'autocomplete_url' => $this->router->generate('is_mainmenu_api_controller_product_autocomplete'),
+                'selected_product_url' => $this->router->generate('is_mainmenu_api_controller_product_selected'),
+            ]);
+
+        return $builder;
+    }
+
     private function buildDefaultFormFields(FormBuilderInterface $builder, array $options): FormBuilderInterface
     {
         $isEdit = !empty($options['data']['id_menu_element']);
@@ -227,6 +288,12 @@ class MenuElementType extends TranslatorAwareType
                 'label' => $this->trans('Css classes for this element', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
                 'help' => $this->trans('Extra css class that will be added to menu item', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
                 'required' => false,
+            ])
+            ->add('grid_type', ChoiceType::class, [
+                'required' => true,
+                'label' => $this->trans('Menu desktop bootstrap grid', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'help' => $this->trans('It\'s only working menu element with depth > 1', TranslationDomains::TRANSLATION_DOMAIN_ADMIN),
+                'choices' => $this->menuLayoutGridChoiceProvider->getChoices(),
             ]);
 
         if (!empty($options['data']['id_parent_element']) && $options['data']['id_parent_element']) {

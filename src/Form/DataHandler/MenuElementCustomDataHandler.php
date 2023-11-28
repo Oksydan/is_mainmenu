@@ -31,7 +31,7 @@ class MenuElementCustomDataHandler implements RelatedEntitiesFormDataHandlerInte
     public function __construct(
         MenuElementCustomRepository $menuElementCustomRepository,
         LangRepository $langRepository,
-        array $languages,
+        array $languages
     ) {
         $this->menuElementCustomRepository = $menuElementCustomRepository;
         $this->langRepository = $langRepository;

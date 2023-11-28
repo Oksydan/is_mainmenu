@@ -3,44 +3,33 @@
 namespace Oksydan\IsMainMenu\Menu;
 
 use Oksydan\IsMainMenu\Entity\MenuElement;
-use Oksydan\IsMainMenu\Presenter\MenuElementPresenter;
-use Oksydan\IsMainMenu\Repository\MenuElementBannerRepository;
-use Oksydan\IsMainMenu\Repository\MenuElementCategoryRepository;
-use Oksydan\IsMainMenu\Repository\MenuElementCustomRepository;
-use Oksydan\IsMainMenu\Repository\MenuElementHtmlRepository;
+use Oksydan\IsMainMenu\Presenter\Menu\MenuElementPresenter;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 
 class MenuTree
 {
+    public const MENU_TYPE_MOBILE = 'mobile';
+    public const MENU_TYPE_DESKTOP = 'desktop';
+
     /**
      * @var MenuElementRepository
      */
     private MenuElementRepository $menuElementRepository;
 
-    /**
-     * @var MenuElementHtmlRepository
-     */
-    private MenuElementHtmlRepository $menuElementHtmlRepository;
-
-    /**
-     * @var MenuElementBannerRepository
-     */
-    private MenuElementBannerRepository $menuElementBannerRepository;
-
-    /**
-     * @var MenuElementCategoryRepository
-     */
-    private MenuElementCategoryRepository $menuElementCategoryRepository;
-
-    /**
-     * @var MenuElementCustomRepository
-     */
-    private MenuElementCustomRepository $menuElementCustomRepository;
-
     /*
      * @var MenuElementPresenter
      */
     private MenuElementPresenter $menuElementPresenter;
+
+    /**
+     * @var MenuElementVisibilityManager
+     */
+    private MenuElementVisibilityManager $menuElementVisibilityManager;
+
+    /**
+     * @var MenuElementRelatedElementProvider
+     */
+    private MenuElementRelatedElementProvider $menuElementRelatedElementProvider;
 
     /**
      * @var \Context
@@ -49,41 +38,46 @@ class MenuTree
 
     public function __construct(
         MenuElementRepository $menuElementRepository,
-        MenuElementHtmlRepository $menuElementHtmlRepository,
-        MenuElementBannerRepository $menuElementBannerRepository,
-        MenuElementCategoryRepository $menuElementCategoryRepository,
-        MenuElementCustomRepository $menuElementCustomRepository,
         MenuElementPresenter $menuElementPresenter,
+        MenuElementVisibilityManager $menuElementVisibilityManager,
+        MenuElementRelatedElementProvider $menuElementRelatedElementProvider,
         \Context $context
     ) {
         $this->menuElementRepository = $menuElementRepository;
-        $this->menuElementHtmlRepository = $menuElementHtmlRepository;
-        $this->menuElementBannerRepository = $menuElementBannerRepository;
-        $this->menuElementCategoryRepository = $menuElementCategoryRepository;
-        $this->menuElementCustomRepository = $menuElementCustomRepository;
         $this->menuElementPresenter = $menuElementPresenter;
+        $this->menuElementVisibilityManager = $menuElementVisibilityManager;
+        $this->menuElementRelatedElementProvider = $menuElementRelatedElementProvider;
         $this->context = $context;
     }
 
-    public function getMenuTree(): array
+    public function getMenuTree(int $idElement = null, string $menuType = self::MENU_TYPE_DESKTOP, int $maxDepth = null): array
     {
-        $root = $this->menuElementRepository->getRootElement();
+        if ($idElement) {
+            $root = $this->menuElementRepository->getMenuElementById($idElement);
+        } else {
+            $root = $this->menuElementRepository->getRootElement();
+        }
 
-        return $this->buildMenuTreeRecursively($root);
+        return $this->buildMenuTreeRecursively($root, $menuType, 0, $maxDepth);
     }
 
-    private function buildMenuTreeRecursively(MenuElement $menuElement): array
+    private function buildMenuTreeRecursively(MenuElement $menuElement, string $menuType, int $currentDepth, ?int $maxDepth): array
     {
         $children = $this->getElementChildren($menuElement);
         $tree = [];
+        ++$currentDepth;
+
+        if ($maxDepth && $currentDepth > $maxDepth) {
+            return $tree;
+        }
 
         foreach ($children as $child) {
-            $relatedMenuElement = $this->getRelatedMenuElementByMenuElement($child);
+            $relatedMenuElement = $this->menuElementRelatedElementProvider->getRelatedMenuElementByMenuElement($child);
 
-            if ($relatedMenuElement) {
+            if ($relatedMenuElement && $this->menuElementVisibilityManager->shouldBeElementDisplayed($child, $relatedMenuElement, $menuType)) {
                 $tree[] = [
-                    ...$this->menuElementPresenter->present($child, $relatedMenuElement),
-                    'children' => $this->buildMenuTreeRecursively($child),
+                    ...$this->menuElementPresenter->present($child, $relatedMenuElement, $menuType),
+                    'children' => $this->buildMenuTreeRecursively($child, $menuType, $currentDepth, $maxDepth),
                 ];
             }
         }
@@ -94,21 +88,5 @@ class MenuTree
     private function getElementChildren(MenuElement $menuElement): array
     {
         return $this->menuElementRepository->getActiveMenuElementChildrenByStoreId($menuElement, $this->context->shop->id);
-    }
-
-    private function getRelatedMenuElementByMenuElement(MenuElement $menuElement)
-    {
-        switch ($menuElement->getType()) {
-            case MenuElement::TYPE_HTML:
-                return $this->menuElementHtmlRepository->findMenuElementHtmlByMenuElement($menuElement);
-            case MenuElement::TYPE_BANNER:
-                return $this->menuElementBannerRepository->findMenuElementBannerByMenuElement($menuElement);
-            case MenuElement::TYPE_LINK:
-                return $this->menuElementCustomRepository->findMenuElementCustomByMenuElement($menuElement);
-            case MenuElement::TYPE_CATEGORY:
-                return $this->menuElementCategoryRepository->findMenuElementCategoryByMenuElement($menuElement);
-        }
-
-        return null;
     }
 }

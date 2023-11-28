@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oksydan\IsMainMenu\Handler\MenuElement;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Oksydan\IsMainMenu\Cache\ModuleCache;
 use Oksydan\IsMainMenu\Entity\MenuElement;
 use Oksydan\IsMainMenu\Entity\MenuElementBanner;
 use Oksydan\IsMainMenu\Factory\FileEraserFactory;
@@ -14,7 +15,7 @@ use Oksydan\IsMainMenu\Repository\MenuElementCustomRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementHtmlRepository;
 use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 
-class DeleteMenuElementHandler
+class DeleteMenuElementHandler implements MenuElementHandlerInterface
 {
     /**
      * @var EntityManagerInterface
@@ -51,6 +52,11 @@ class DeleteMenuElementHandler
      */
     private FileEraserFactory $fileEraserFactory;
 
+    /*
+     * @var ModuleCache
+     */
+    private ModuleCache $moduleCache;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         MenuElementRepository $menuElementRepository,
@@ -58,7 +64,8 @@ class DeleteMenuElementHandler
         MenuElementBannerRepository $menuElementBannerRepository,
         MenuElementCategoryRepository $menuElementCategoryRepository,
         MenuElementCustomRepository $menuElementCustomRepository,
-        FileEraserFactory $fileEraserFactory
+        FileEraserFactory $fileEraserFactory,
+        ModuleCache $moduleCache
     ) {
         $this->entityManager = $entityManager;
         $this->menuElementRepository = $menuElementRepository;
@@ -67,6 +74,7 @@ class DeleteMenuElementHandler
         $this->menuElementCategoryRepository = $menuElementCategoryRepository;
         $this->menuElementCustomRepository = $menuElementCustomRepository;
         $this->fileEraserFactory = $fileEraserFactory;
+        $this->moduleCache = $moduleCache;
     }
 
     public function handle(int $menuElementId): void
@@ -77,6 +85,8 @@ class DeleteMenuElementHandler
             $this->removeRecursively($menuElement);
             $this->removeMenuElement($menuElement);
             $this->entityManager->flush();
+
+            $this->moduleCache->clearCache();
         }
     }
 
