@@ -10,7 +10,7 @@ class DisplayMobileMenu extends AbstractCacheableDisplayHook
 {
     protected function assignTemplateVariables(array $params)
     {
-        $menuElements = $this->menuTree->getMenuTree(null, MenuTree::MENU_TYPE_MOBILE, 1);
+        $menuElements = $this->menuTree->getMenuTree(null, 2, 1);
 
         $this->context->smarty->assign([
             'menu' => $menuElements,
