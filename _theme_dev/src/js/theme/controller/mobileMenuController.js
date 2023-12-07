@@ -53,7 +53,6 @@ const mobileMenuController = (options = {}) => {
   const nextLevelBtnClickHandler = async (event) => {
     event.preventDefault();
 
-
     const { delegateTarget } = event;
     const id = delegateTarget.getAttribute('data-id');
 
