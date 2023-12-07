@@ -1,5 +1,5 @@
-<div class="f-mobile-menu js-mobile-menu">
-  <div class="js-mobile-menu-track mobile-menu__track">
+<div class="f-mobile-menu js-f-mobile-menu">
+  <div class="js-f-mobile-menu-track f-mobile-menu__track">
     {include file="module:is_mainmenu/views/templates/front/mobile-submenu.tpl" menu_tree=$menu}
   </div>
 
