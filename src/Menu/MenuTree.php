@@ -8,7 +8,7 @@ use Oksydan\IsMainMenu\Repository\MenuElementRepository;
 
 class MenuTree
 {
-    public const MENU_TYPE_MOBILE = 'mobile';
+    public const MENU_TYPE_MOBILE = 1;
     public const MENU_TYPE_DESKTOP = 'desktop';
 
     /**
