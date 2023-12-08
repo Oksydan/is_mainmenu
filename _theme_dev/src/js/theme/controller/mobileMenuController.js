@@ -23,11 +23,11 @@ const mobileMenuController = (options = {}) => {
     menuListActiveClass,
   } = {
     mobileMenuOffcanvasSelector: '#mobile_menu_offcanvas',
-    mobileMenuMainWrapper: '.js-mobile-menu',
-    mobileMenuTrack: '.js-mobile-menu-track',
-    nextLevelBtnSelector: '.js-mobile-menu-tab-link',
-    menuListElementSelector: '.js-mobile-menu-list',
-    menuBackBtnSelector: '.js-mobile-menu-back-btn',
+    mobileMenuMainWrapper: '.js-f-mobile-menu',
+    mobileMenuTrack: '.js-f-mobile-menu-track',
+    nextLevelBtnSelector: '.js-f-mobile-menu-tab-link',
+    menuListElementSelector: '.js-f-mobile-menu-list',
+    menuBackBtnSelector: '.js-f-mobile-menu-back-btn',
     menuListActiveClass: 'active',
     ...options,
   };
